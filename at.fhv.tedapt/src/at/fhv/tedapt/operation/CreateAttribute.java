@@ -82,7 +82,7 @@ public class CreateAttribute extends TedaptMigration {
 		}
 		
 		
-		Session ses = HibernateHandler.getFactory(user, password, dataBase).getCurrentSession();
+		Session ses = HibernateHandler.getFactory().getCurrentSession();
 		
 		ses.getTransaction().begin();
 		

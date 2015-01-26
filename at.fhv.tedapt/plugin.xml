@@ -10,5 +10,19 @@
                class="at.fhv.tedapt.operation.CreateAttribute">
          </operation>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="at.fhv.tedapt.preferences.TedaptPreferences"
+            id="at.fhv.tedapt.preferences.TedaptPreferences"
+            name="Tedapt">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="at.fhv.tedapt.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

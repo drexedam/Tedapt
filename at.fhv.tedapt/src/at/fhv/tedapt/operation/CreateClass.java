@@ -52,7 +52,7 @@ public class CreateClass extends TedaptMigration {
 		
 		//Only super class needs to be represented as table
 		if(superClasses.isEmpty()) {
-			Session ses = HibernateHandler.getFactory(user, password, dataBase).getCurrentSession();
+			Session ses = HibernateHandler.getFactory().getCurrentSession();
 			
 			ses.getTransaction().begin();
 			

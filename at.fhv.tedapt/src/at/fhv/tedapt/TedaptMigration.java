@@ -1,9 +1,6 @@
 package at.fhv.tedapt;
 
-import org.eclipse.emf.edapt.declaration.EdaptParameter;
 import org.eclipse.emf.edapt.declaration.OperationImplementation;
-
-import at.fhv.tedapt.hibernate.HibernateHandler;
 
 
 /**
@@ -15,16 +12,16 @@ import at.fhv.tedapt.hibernate.HibernateHandler;
 public abstract class TedaptMigration extends OperationImplementation {
 
 	
-	/** {@description} */
-	@EdaptParameter(description="Database user")
-	public String user = HibernateHandler.USER;
-	
-	/** {@description} */
-	@EdaptParameter(description="Adress and Databasename")
-	public String dataBase = HibernateHandler.DATABASE;
-
-	/** {@description} */
-	@EdaptParameter(description="Database password")
-	public String password = HibernateHandler.PW;
+//	/** {@description} */
+//	@EdaptParameter(description="Database user")
+//	public String user = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_UNAME);
+//	
+//	/** {@description} */
+//	@EdaptParameter(description="Adress and Databasename")
+//	public String dataBase = HibernateHandler.DATABASE;
+//
+//	/** {@description} */
+//	@EdaptParameter(description="Database password")
+//	public String password = HibernateHandler.PW;
 	
 }

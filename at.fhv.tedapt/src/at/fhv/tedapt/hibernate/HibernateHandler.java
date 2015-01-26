@@ -7,6 +7,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
+import at.fhv.tedapt.Activator;
+import at.fhv.tedapt.preferences.PreferenceConstants;
+
 /**
  * 
  * @author Damian Drexel
@@ -16,10 +19,11 @@ import org.hibernate.service.ServiceRegistry;
 public class HibernateHandler {
 	private static SessionFactory _sf;
 	
-	//DB-Access data used by each operation
-	public static String USER = "root";
-	public static String PW = "";
-	public static String DATABASE = "localhost/test";
+	private static String _user;
+	private static String _password;
+	private static String _dbAddr;
+	private static String _dbName;
+	
 	
 	private static QueryFactory _factory;
 	
@@ -32,66 +36,32 @@ public class HibernateHandler {
 	 */
 	public static SessionFactory getFactory() {
 		if(_sf == null) {
-			init();
+			update();
 		}
 		
 		return _sf;
 	}
 	
-	/**
-	 * 
-	 * @param user User for DB access
-	 * @param pw Password for DB access
-	 * @param database DB adrress and name
-	 * @return Returns a new session factory if none exists or access data has changed
-	 */
-	public static SessionFactory getFactory(String user, String pw, String database) {
-		if(changed(user, pw, database) || _sf == null) {
-			init();
-		}
-		
-		
-		return _sf;
+	
+	public static void update() {
+		_user = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_UNAME);
+		_password = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PW);
+		_dbName = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.DB_NAME);
+		_dbAddr = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.DB_ADDRESS);
+		setUpSessionFactory();
 	}
 	
-	/**
-	 * 
-	 * @param user User for DB access
-	 * @param pw Password for DB access
-	 * @param database DB adrress and name
-	 * @return Returns true if any of the parameters have changed else otherwise
-	 */
-	private static boolean changed(String user, String pw, String database) {
-		boolean temp = false;
-		
-		if(!USER.equals(user)) {
-			USER = user;
-			temp = true;
-		}
-		
-		if(!PW.equals(pw)) {
-			PW = pw;
-			temp = true;
-		}
-		
-		if(!DATABASE.equals(database)) {
-			DATABASE = database;
-			temp = true;
-		}
-		
-		return temp;
-	}
 	
 	/**
 	 * Initializes the session factory
 	 */
-	private static void init() {
+	private static void setUpSessionFactory() {
 		try {
 			Configuration config = new Configuration();
 			config.setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
-			config.setProperty(Environment.URL, "jdbc:mysql://"+DATABASE);
-			config.setProperty(Environment.USER, USER);
-			config.setProperty(Environment.PASS, PW);
+			config.setProperty(Environment.URL, "jdbc:mysql://"+_dbAddr+"/"+_dbName);
+			config.setProperty(Environment.USER, _user);
+			config.setProperty(Environment.PASS, _password);
 			config.setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect");
 			config.setProperty(Environment.SHOW_SQL, "true");
 			config.setProperty(Environment.ORDER_UPDATES, "true");
