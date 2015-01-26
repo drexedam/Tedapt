@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tedapt
+Bundle-SymbolicName: at.fhv.tedapt;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: at.fhv.tedapt.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.emf.edapt.declaration,
+ org.eclipse.emf.edapt.common,
+ org.eclipse.emf.edapt.migration,
+ org.hibernate
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: at.fhv.tedapt
