@@ -3,13 +3,14 @@ package at.fhv.tedapt.operation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.edapt.common.MetamodelFactory;
+import org.eclipse.emf.edapt.declaration.EdaptConstraint;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
 import org.eclipse.emf.edapt.declaration.EdaptParameter;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
-import org.hibernate.Session;
 
 import at.fhv.tedapt.TedaptMigration;
+import at.fhv.tedapt.helper.CommonTasks;
 import at.fhv.tedapt.hibernate.HibernateHandler;
 
 /**
@@ -47,32 +48,40 @@ public class CreateAttribute extends TedaptMigration {
 	/** {@description} */
 	@EdaptParameter(description = "The default value literal", optional = true)
 	public String defaultValue;
+	
+	/** {@description} */
+	@EdaptConstraint(description="Not nullable attributes need a default value")
+	public boolean checkDefault() {
+		if(upperBound == 1 && upperBound==lowerBound) {
+			return defaultValue != null && !defaultValue.isEmpty();
+		}
+		
+		return true;
+	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void execute(Metamodel metamodel, Model model) {
+		
+		//Metamodel adaption
 		MetamodelFactory.newEAttribute(eClass, name, type, lowerBound,
 				upperBound, defaultValue);
 		
+		//DB adaption
 		String query;
 		
-		//Need name of most abstract class
-		String superClass;
-		if(eClass.getEAllSuperTypes().isEmpty()) {
-			superClass = eClass.getName();
-		} else {
-			superClass = eClass.getEAllSuperTypes().get(0).getName();
-		}
+		//Name of most abstract class
+		String superClass = CommonTasks.getMostAbstract(eClass).getName();
 		
 
-		//Common attributes are mapped as columns
-		//Attributes which upper bound > 1 and EByteArrays are mapped as Table
-		if(upperBound == 1 && !type.getName().equals("EByteArray")) {
+		//Attributes upperBound == 1 are mapped as column otherwise as table
+		if(!CommonTasks.mapAsTable(upperBound, type.getName())) {
 			query = HibernateHandler.getQueryFactory().createAttributeQuery(
 					superClass, 
 					name, 
 					HibernateHandler.mapDataType(type), 
-					(upperBound == lowerBound)); 
+					(upperBound == lowerBound),
+					defaultValue); 
 		} else {
 			query = HibernateHandler.getQueryFactory().createAttributeTableQuery(
 					eClass.getName(), 
@@ -81,16 +90,7 @@ public class CreateAttribute extends TedaptMigration {
 					HibernateHandler.mapDataType(type));
 		}
 		
-		
-		Session ses = HibernateHandler.getFactory().getCurrentSession();
-		
-		ses.getTransaction().begin();
-		
-		ses.createSQLQuery(query).executeUpdate();
-		
-		
-		ses.getTransaction().commit();
-		
+		HibernateHandler.executeQuery(query);	
 		
 	}
 

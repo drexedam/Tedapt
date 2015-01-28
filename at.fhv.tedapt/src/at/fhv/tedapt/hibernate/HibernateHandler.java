@@ -1,6 +1,7 @@
 package at.fhv.tedapt.hibernate;
 
 import org.eclipse.emf.ecore.EDataType;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -31,9 +32,10 @@ public class HibernateHandler {
 	private HibernateHandler(){};
 	
 	/**
-	 * 
+	 * @deprecated Use provided functions (e.g. executeQuery) instead
 	 * @return Returns a new session factory with currently set access data
 	 */
+	@Deprecated
 	public static SessionFactory getFactory() {
 		if(_sf == null) {
 			update();
@@ -44,6 +46,9 @@ public class HibernateHandler {
 	
 	
 	public static void update() {
+		if(_sf  != null) {
+			_sf.close();
+		}
 		_user = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_UNAME);
 		_password = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PW);
 		_dbName = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.DB_NAME);
@@ -129,5 +134,17 @@ public class HibernateHandler {
 		return _factory;
 	}
 	
+	public static void executeQuery(String query) {
+		System.out.println(query);
+//		Session ses = _sf.getCurrentSession();
+//		
+//		ses.getTransaction().begin();
+//		
+//		
+//		ses.createSQLQuery(query).executeUpdate();
+//		
+//		
+//		ses.getTransaction().commit();
+	}
 }
 

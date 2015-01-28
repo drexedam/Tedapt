@@ -11,7 +11,6 @@ import org.eclipse.emf.edapt.declaration.EdaptParameter;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
-import org.hibernate.Session;
 
 import at.fhv.tedapt.TedaptMigration;
 import at.fhv.tedapt.hibernate.HibernateHandler;
@@ -41,7 +40,7 @@ public class CreateClass extends TedaptMigration {
 	public List<EClass> superClasses = new ArrayList<EClass>();
 	
 	/** {@description} */
-	@EdaptParameter(description = "Whether the class is abstract")
+	@EdaptParameter(description = "Whether the class is abstract or not")
 	public Boolean abstr = false;
 	
 	/** {@inheritDoc} */
@@ -52,16 +51,7 @@ public class CreateClass extends TedaptMigration {
 		
 		//Only super class needs to be represented as table
 		if(superClasses.isEmpty()) {
-			Session ses = HibernateHandler.getFactory().getCurrentSession();
-			
-			ses.getTransaction().begin();
-			
-			String query = HibernateHandler.getQueryFactory().createClassQuery(name);
-			
-			ses.createSQLQuery(query).executeUpdate();
-			
-			
-			ses.getTransaction().commit();
+			HibernateHandler.executeQuery(HibernateHandler.getQueryFactory().createClassQuery(name));
 		}
 		
 		

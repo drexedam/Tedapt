@@ -2,6 +2,7 @@ package at.fhv.tedapt.preferences;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -39,10 +40,21 @@ public class TedaptPreferences
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-		StringFieldEditor uName, dbAdr, dbName;
+		StringFieldEditor uName, uPW, dbAdr, dbName;
 		
 		uName = new StringFieldEditor(PreferenceConstants.P_UNAME, "Database &username", getFieldEditorParent());
 		uName.setEmptyStringAllowed(false);
+		
+		uPW = new StringFieldEditor(PreferenceConstants.P_PW, "Database &password", getFieldEditorParent()) {
+
+			@Override
+		    protected void doFillIntoGrid(Composite parent, int numColumns) {
+		        super.doFillIntoGrid(parent, numColumns);
+		
+		        getTextControl().setEchoChar('*');
+		    }
+		
+		};
 		
 		dbAdr = new StringFieldEditor(PreferenceConstants.DB_ADDRESS, "Database &address", getFieldEditorParent());
 		dbAdr.setEmptyStringAllowed(false);
@@ -51,7 +63,7 @@ public class TedaptPreferences
 		dbName.setEmptyStringAllowed(false);
 		
 		addField(uName);
-		addField(new StringFieldEditor(PreferenceConstants.P_PW, "Database &password", getFieldEditorParent()));
+		addField(uPW);
 		addField(dbAdr);
 		addField(dbName);
 

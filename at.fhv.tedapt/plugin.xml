@@ -9,6 +9,12 @@
          <operation
                class="at.fhv.tedapt.operation.CreateAttribute">
          </operation>
+         <operation
+               class="at.fhv.tedapt.operation.CreateReference">
+         </operation>
+         <operation
+               class="at.fhv.tedapt.operation.DeleteFeature">
+         </operation>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">

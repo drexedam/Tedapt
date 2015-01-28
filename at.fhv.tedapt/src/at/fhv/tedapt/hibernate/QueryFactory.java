@@ -9,6 +9,8 @@ package at.fhv.tedapt.hibernate;
  */
 public interface QueryFactory {
 	
+	public String concatQueries(String q1, String q2);
+	
 	/**
 	 * 
 	 * @param className The name of the created class
@@ -24,7 +26,7 @@ public interface QueryFactory {
 	 * @param notNull If the attribute can be null
 	 * @return A SQL query to create a new column for simple attributes
 	 */
-	public String createAttributeQuery(String superClass, String attrName, String type, boolean notNull);
+	public String createAttributeQuery(String superClass, String attrName, String type, boolean notNull, String defaultValue);
 	
 	/**
 	 * 
@@ -35,4 +37,29 @@ public interface QueryFactory {
 	 * @return A SQL query to create a table for more complex attributes
 	 */
 	public String createAttributeTableQuery(String className, String superClass, String attrName, String type);
+
+	public String createSimpleReferenceQuery(String superClass, String refClassName, String refSuperClass,
+			String refName, boolean notNull);
+	
+	public String createReferenceTableQuery(String className,
+			String superClass, String refClassName, String refSuperClass, String attrName);
+	
+	/**
+	 * 
+	 * @param tableName The name of the table containing the column
+	 * @param columnName The name of the column to be dropped 
+	 * @return A SQL query to drop a column
+	 */
+	public String deleteColumn(String tableName, String columnName);
+	
+	/**
+	 * 
+	 * @param tableName The table to be deleted
+	 * @return A SQL query to delete a table
+	 */
+	public String deleteTable(String tableName);
+	
+	public String createContainerCol(String refSuperClass);
+	
+	public String addIDXQuery(String className, String superClassName, String refName);
 }

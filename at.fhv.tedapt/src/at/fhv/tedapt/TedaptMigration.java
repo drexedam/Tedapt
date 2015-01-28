@@ -24,4 +24,6 @@ public abstract class TedaptMigration extends OperationImplementation {
 //	@EdaptParameter(description="Database password")
 //	public String password = HibernateHandler.PW;
 	
+	
+	
 }
