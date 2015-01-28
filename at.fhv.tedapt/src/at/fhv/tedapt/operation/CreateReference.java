@@ -12,6 +12,12 @@ import at.fhv.tedapt.TedaptMigration;
 import at.fhv.tedapt.helper.CommonTasks;
 import at.fhv.tedapt.hibernate.HibernateHandler;
 
+/**
+ * 
+ * @author Damian Drexel
+ * @version 0.1
+ *
+ */
 @SuppressWarnings("restriction")
 @EdaptOperation(identifier = "newReferenceTedapt", label = "Create Reference Tedapt", description = "Creates a new reference and corresponding database entries.")
 public class CreateReference extends TedaptMigration {

@@ -9,4 +9,5 @@ public class PreferenceConstants {
 	public static final String P_PW = "PASSWORD";
 	public static final String DB_ADDRESS = "DB_ADR";
 	public static final String DB_NAME = "DB_NAME";	
+	
 }

@@ -10,8 +10,7 @@ import org.eclipse.emf.edapt.declaration.OperationImplementation;
  *
  */
 public abstract class TedaptMigration extends OperationImplementation {
-
-	
+//TODO Check if still needed
 //	/** {@description} */
 //	@EdaptParameter(description="Database user")
 //	public String user = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_UNAME);
@@ -23,7 +22,5 @@ public abstract class TedaptMigration extends OperationImplementation {
 //	/** {@description} */
 //	@EdaptParameter(description="Database password")
 //	public String password = HibernateHandler.PW;
-	
-	
-	
+		
 }

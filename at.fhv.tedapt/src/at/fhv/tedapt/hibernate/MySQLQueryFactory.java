@@ -24,7 +24,6 @@ public class MySQLQueryFactory implements QueryFactory {
 			String type, boolean notNull, String defaultValue) {
 		superClass = superClass.toLowerCase();
 		attrName = attrName.toLowerCase();
-		//TODO NOT NULL will not work if there is data within the table!
 		return "ALTER TABLE "+superClass+" ADD "
 				+attrName+" "
 				+type

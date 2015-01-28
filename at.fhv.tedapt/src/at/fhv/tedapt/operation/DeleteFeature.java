@@ -15,6 +15,12 @@ import at.fhv.tedapt.TedaptMigration;
 import at.fhv.tedapt.helper.CommonTasks;
 import at.fhv.tedapt.hibernate.HibernateHandler;
 
+/**
+ * 
+ * @author Damian Drexel
+ * @version 0.1
+ *
+ */
 @EdaptOperation(identifier="deleteFeaterTedapt", label="Delete Feature Tedapt", description="Deletes a feature and its corresponding DB entries.")
 public class DeleteFeature extends TedaptMigration {
 

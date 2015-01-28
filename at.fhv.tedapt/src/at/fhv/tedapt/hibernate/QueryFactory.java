@@ -38,11 +38,30 @@ public interface QueryFactory {
 	 */
 	public String createAttributeTableQuery(String className, String superClass, String attrName, String type);
 
+	/**
+	 * 
+	 * @param superClass The most abstract class of the container class
+	 * @param refClassName The class the reference points to
+	 * @param refSuperClass The most abstract class of the class the reference points to
+	 * @param refName The name of the reference
+	 * @param notNull If lower and upper bound are one
+	 * @return A query to create a column for a reference
+	 */
+	//TODO How to prevent errors if there is already data in the table and the column may not be null
 	public String createSimpleReferenceQuery(String superClass, String refClassName, String refSuperClass,
 			String refName, boolean notNull);
 	
+	/**
+	 * 
+	 * @param className Container class
+	 * @param superClass The most abstract class of the container class
+	 * @param refClassName The referenced class
+	 * @param refSuperClass The most abstract class of the referenced class
+	 * @param refName The references name
+	 * @return A query to create a table for references
+	 */
 	public String createReferenceTableQuery(String className,
-			String superClass, String refClassName, String refSuperClass, String attrName);
+			String superClass, String refClassName, String refSuperClass, String refName);
 	
 	/**
 	 * 
@@ -59,7 +78,19 @@ public interface QueryFactory {
 	 */
 	public String deleteTable(String tableName);
 	
+	/**
+	 * 
+	 * @param refSuperClass The most abstract class of the referenced class
+	 * @return A SQL query to create required columns for containment refferences
+	 */
 	public String createContainerCol(String refSuperClass);
 	
+	/**
+	 * 
+	 * @param className Class name
+	 * @param superClassName The most abstract class the previous class inherits from
+	 * @param refName The name of the reference
+	 * @return A SQL query to add the idx column for a reference
+	 */
 	public String addIDXQuery(String className, String superClassName, String refName);
 }
