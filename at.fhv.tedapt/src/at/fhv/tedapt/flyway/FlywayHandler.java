@@ -66,7 +66,7 @@ public class FlywayHandler {
 		try {
 
 			int version = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.CL_VERSION);
-
+			//TODO redo saving
 			File d = new File("./"+_folderPath);
 			if(!d.exists()) {
 				d.mkdir();
