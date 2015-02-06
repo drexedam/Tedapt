@@ -6,10 +6,19 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: at.fhv.tedapt.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
+ org.eclipse.core.resources,
  org.eclipse.emf.edapt.declaration,
  org.eclipse.emf.edapt.common,
- org.eclipse.emf.edapt.migration,
- org.hibernate
+ org.eclipse.emf.edapt.migration;bundle-version="1.0.1",
+ org.hibernate,
+ com.mysql.jdbc;bundle-version="5.1.26";resolution:=optional,
+ com.db4o;bundle-version="8.0.249";resolution:=optional,
+ com.microsoft.sqlserver.jdbc;bundle-version="4.0.2206";resolution:=optional,
+ org.hsqldb;bundle-version="2.3.2";resolution:=optional,
+ org.postgresql;bundle-version="9.2.1003";resolution:=optional,
+ org.eclipse.emf.edapt.history,
+ org.apache.log4j,
+ at.fhv.tedapt.library.flyaway;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: at.fhv.tedapt
+Export-Package: at.fhv.tedapt;uses:="org.osgi.framework,org.eclipse.emf.edapt.declaration,org.eclipse.ui.plugin"

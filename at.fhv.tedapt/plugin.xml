@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+	<extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="at.fhv.tedapt"
+            defaultHandler="at.fhv.tedapt.ui.MigrateHandler"
+            id="at.fhv.tedapt.Migrate"
+            name="Migrate">
+      </command>
+      <category
+            id="at.fhv.tedapt"
+            name="Tedapt">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="at.fhv.tedapt.menu"
+               label="Tedapt">
+            <command
+                  commandId="at.fhv.tedapt.Migrate"
+                  label="Migrate"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
    <extension
          point="org.eclipse.emf.edapt.operations">
          <operation

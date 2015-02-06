@@ -6,12 +6,17 @@ import org.eclipse.emf.edapt.common.MetamodelFactory;
 import org.eclipse.emf.edapt.declaration.EdaptConstraint;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
 import org.eclipse.emf.edapt.declaration.EdaptParameter;
+import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 
-import at.fhv.tedapt.TedaptMigration;
+import at.fhv.tedapt.flyway.DatabaseHandler;
+import at.fhv.tedapt.flyway.FlywayHandler;
+import at.fhv.tedapt.flyway.change.AddColumn;
+import at.fhv.tedapt.flyway.change.Change;
+import at.fhv.tedapt.flyway.change.CreateTable;
+import at.fhv.tedapt.flyway.entity.Column;
 import at.fhv.tedapt.helper.CommonTasks;
-import at.fhv.tedapt.hibernate.HibernateHandler;
 
 /**
  * {@description}
@@ -23,7 +28,7 @@ import at.fhv.tedapt.hibernate.HibernateHandler;
 
 @SuppressWarnings("restriction")
 @EdaptOperation(identifier="createAttributeTedapt", label="Create Attribute Tedapt", description="A new attribute and the coresponding column are created.")
-public class CreateAttribute extends TedaptMigration {
+public class CreateAttribute extends OperationImplementation {
 
 	/** {@description} */
 	@EdaptParameter(main = true, description = "The class in which the attribute is created")
@@ -68,29 +73,34 @@ public class CreateAttribute extends TedaptMigration {
 				upperBound, defaultValue);
 		
 		//DB adaption
-		String query;
 		
 		//Name of most abstract class
 		String superClass = CommonTasks.getMostAbstract(eClass).getName();
 		
-
+		
+		
+		Change change;
 		//Attributes upperBound == 1 are mapped as column otherwise as table
 		if(!CommonTasks.mapAsTable(upperBound, type.getName())) {
-			query = HibernateHandler.getQueryFactory().createAttributeQuery(
-					superClass, 
-					name, 
-					HibernateHandler.mapDataType(type), 
-					(upperBound == lowerBound),
-					defaultValue); 
+			Column c = new Column(name, DatabaseHandler.mapDataType(type),(upperBound == lowerBound));
+			c.setDefault(defaultValue);
+			change = new AddColumn(superClass, c);
 		} else {
-			query = HibernateHandler.getQueryFactory().createAttributeTableQuery(
-					eClass.getName(), 
-					superClass, 
-					name, 
-					HibernateHandler.mapDataType(type));
+			String tableName = eClass.getName()+"_"+name;
+			CreateTable ct = new CreateTable(tableName);
+			Column pk = new Column(tableName+"_e_id", "bigint(20)");
+			ct.addPrimaryKey(pk);
+			Column elt = new Column("elt", DatabaseHandler.mapDataType(type));
+			ct.addColumn(elt);
+			Column idx = new Column(tableName+"_idx", "int(11)");
+			ct.addPrimaryKey(idx);
+			ct.addForeignKey(idx, superClass, "e_id");
+			change = ct;			
 		}
 		
-		HibernateHandler.executeQuery(query);	
+		FlywayHandler.addChange(change);
+		
+		FlywayHandler.saveChangelog(metamodel.getEPackages().get(0).getNsPrefix());
 		
 	}
 

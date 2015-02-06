@@ -1,13 +1,14 @@
 package at.fhv.tedapt.preferences;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import at.fhv.tedapt.Activator;
-import at.fhv.tedapt.hibernate.HibernateHandler;
 
 /**
  * This class represents a preference page that
@@ -41,6 +42,8 @@ public class TedaptPreferences
 	 */
 	public void createFieldEditors() {
 		StringFieldEditor uName, uPW, dbAdr, dbName;
+		IntegerFieldEditor clVersion;
+		RadioGroupFieldEditor dbms;
 		
 		uName = new StringFieldEditor(PreferenceConstants.P_UNAME, "Database &username", getFieldEditorParent());
 		uName.setEmptyStringAllowed(false);
@@ -62,11 +65,23 @@ public class TedaptPreferences
 		dbName = new StringFieldEditor(PreferenceConstants.DB_NAME, "Database &name", getFieldEditorParent());
 		dbName.setEmptyStringAllowed(false);
 		
+		clVersion = new IntegerFieldEditor(PreferenceConstants.CL_VERSION, "Changelog &version", getFieldEditorParent());
+		clVersion.setEnabled(false, getFieldEditorParent());
+		
+		dbms = new RadioGroupFieldEditor(PreferenceConstants.DB_MS, 
+				"Database management &system", 1, new String[][] {
+					{"HSQL", PreferenceConstants.DBMS_HSQL},
+					{"MySQL", PreferenceConstants.DBMS_MYSQL},
+					{"PostgreSQL", PreferenceConstants.DBMS_PSQL},
+					{"SQL Server", PreferenceConstants.DBMS_SQLSERV}},
+				getFieldEditorParent());
+				
 		addField(uName);
 		addField(uPW);
 		addField(dbAdr);
 		addField(dbName);
-
+		addField(dbms);
+		addField(clVersion);
 		
 	}
 
@@ -78,8 +93,6 @@ public class TedaptPreferences
 	
 	@Override
 	public boolean performOk() {
-		
-		HibernateHandler.update();
 		return super.performOk();
 	}
 	

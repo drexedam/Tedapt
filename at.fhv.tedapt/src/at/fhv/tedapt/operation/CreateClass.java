@@ -8,12 +8,15 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.edapt.common.MetamodelFactory;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
 import org.eclipse.emf.edapt.declaration.EdaptParameter;
+import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 
-import at.fhv.tedapt.TedaptMigration;
-import at.fhv.tedapt.hibernate.HibernateHandler;
+import at.fhv.tedapt.flyway.FlywayHandler;
+import at.fhv.tedapt.flyway.change.CreateTable;
+import at.fhv.tedapt.flyway.entity.Column;
+
 
 /**
  * {@description}
@@ -25,7 +28,7 @@ import at.fhv.tedapt.hibernate.HibernateHandler;
 
 @SuppressWarnings("restriction")
 @EdaptOperation(identifier="createClassTedapt", label="Create Class Tedapt", description="A new class and the coresponding table are created.")
-public class CreateClass extends TedaptMigration {
+public class CreateClass extends OperationImplementation {
 
 	/** {@description} */
 	@EdaptParameter(main=true,description="The package to create the class within")
@@ -51,11 +54,18 @@ public class CreateClass extends TedaptMigration {
 		
 		//Only super class needs to be represented as table
 		if(superClasses.isEmpty()) {
-			HibernateHandler.executeQuery(HibernateHandler.getQueryFactory().createClassQuery(name));
+			CreateTable ct = new CreateTable(name);
+			ct.addPrimaryKey(new Column("e_id", "bigint(20)", true, true));
+			
+			ct.addColumn(new Column("dtype", "varchar(255)", true));
+			ct.addColumn(new Column("e_version", "int(11)", true));
+			
+			FlywayHandler.addChange(ct);
+	
+			
+			FlywayHandler.saveChangelog(metamodel.getEPackages().get(0).getNsPrefix());
 		}
-		
-		
-		
+			
 	}
 
 

@@ -5,12 +5,16 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edapt.common.MetamodelFactory;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
 import org.eclipse.emf.edapt.declaration.EdaptParameter;
+import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 
-import at.fhv.tedapt.TedaptMigration;
+import at.fhv.tedapt.flyway.FlywayHandler;
+import at.fhv.tedapt.flyway.change.AddColumn;
+import at.fhv.tedapt.flyway.change.AddReferenceColumn;
+import at.fhv.tedapt.flyway.change.CreateTable;
+import at.fhv.tedapt.flyway.entity.Column;
 import at.fhv.tedapt.helper.CommonTasks;
-import at.fhv.tedapt.hibernate.HibernateHandler;
 
 /**
  * 
@@ -20,7 +24,7 @@ import at.fhv.tedapt.hibernate.HibernateHandler;
  */
 @SuppressWarnings("restriction")
 @EdaptOperation(identifier = "newReferenceTedapt", label = "Create Reference Tedapt", description = "Creates a new reference and corresponding database entries.")
-public class CreateReference extends TedaptMigration {
+public class CreateReference extends OperationImplementation {
 
 	/** {@description} */
 	@EdaptParameter(main = true, description = "The class in which the reference is created")
@@ -73,55 +77,59 @@ public class CreateReference extends TedaptMigration {
 		EClass superClass = CommonTasks.getMostAbstract(eClass);
 		EClass refSuperClass = CommonTasks.getMostAbstract(type);
 		boolean notNull = (upperBound == 1 && lowerBound == 1);
-		String query = null;
+
 		if(containment) {
 			//create containment columns
-			String q1 = HibernateHandler.getQueryFactory().createContainerCol(refSuperClass.getName());
-			String q2 = "";
+			FlywayHandler.addChange(new AddColumn(
+					refSuperClass.getName(), 
+					new Column("econtainer_class", "varchar(255)")));
+			FlywayHandler.addChange(new AddColumn(
+					refSuperClass.getName(), 
+					new Column("e_container", "varchar(255)")));
+			FlywayHandler.addChange(new AddColumn(
+					refSuperClass.getName(),
+					new Column("e_container_feature_name", "varchar(255)")));
+	
 			if(upperBound != 1) {
 				// additional columns in (super-)class which is contained
-				q2 = query = HibernateHandler.getQueryFactory().createSimpleReferenceQuery(
+				FlywayHandler.addChange(new AddReferenceColumn(
+						new Column(superClass.getName()+"_"+name, "bigint(28)",notNull),
 						refSuperClass.getName(), 
 						superClass.getName(), 
-						superClass.getName(), 
-						name,
-						notNull);
-				q2 = HibernateHandler.getQueryFactory().concatQueries(q2, 
-						HibernateHandler.getQueryFactory().addIDXQuery(eClass.getName(), refSuperClass.getName(), name));
+						"e_id"));
 			} else {
 				// additional columns in (super-)class which contains the other class
-				q2 = HibernateHandler.getQueryFactory().createSimpleReferenceQuery(
+				FlywayHandler.addChange(new AddReferenceColumn(
+						new Column(type.getName()+"_"+name, "bigint(28)",notNull),
 						superClass.getName(), 
-						type.getName(), 
 						refSuperClass.getName(), 
-						name,
-						notNull);
+						"e_id"));
 			}
-			
-			query = HibernateHandler.getQueryFactory().concatQueries(q1, q2);
-			
 		} else {
 			if(upperBound != 1) {
 				// create table for reference
+				CreateTable ct = new CreateTable(eClass.getName()+"_"+name);
 				
-				query = HibernateHandler.getQueryFactory().createReferenceTableQuery(
-						eClass.getName(), 
-						superClass.getName(), 
-						type.getName(), 
-						refSuperClass.getName(), 
-						name);
+				Column c1 = new Column(eClass.getName()+"_e_id", "bigint(20)", true);
+				Column c2 = new Column(eClass.getName()+"_"+name+"_idx", "int(11)", true);
+				ct.addColumn(c2);
+				ct.addForeignKey(c1, superClass.getName(), "(e_id)");
+				ct.addForeignKey(new Column(type.getName()+"_e_id", "bigint(20)", true), refSuperClass.getName(), "(e_id)");
+				ct.addPrimaryKey(c1);
+				ct.addPrimaryKey(c2);
+
 			} else {
 				// add column in containing class
-				query = HibernateHandler.getQueryFactory().createSimpleReferenceQuery(
+				FlywayHandler.addChange(new AddReferenceColumn(
+						new Column(type.getName()+"_"+name, "bigint(28)",notNull),
 						superClass.getName(), 
-						type.getName(), 
 						refSuperClass.getName(), 
-						name,
-						notNull);
+						"e_id"));
 			}
 		}
 		
-		HibernateHandler.executeQuery(query);
+		FlywayHandler.saveChangelog(metamodel.getEPackages().get(0).getNsPrefix());
+		
 	}
 
 }
