@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import at.fhv.tedapt.exception.PrimaryKeyCanBeNullException;
 import at.fhv.tedapt.flyway.entity.Column;
 import at.fhv.tedapt.flyway.entity.ForeignKey;
 
@@ -68,8 +69,12 @@ public class CreateTable implements Change {
 	/**
 	 * Adds given column as primary key. To add multiple primary keys use this function multiple times
 	 * @param c The primary key column
+	 * @throws PrimaryKeyCanBeNullException 
 	 */
-	public void addPrimaryKey(Column c) {
+	public void addPrimaryKey(Column c) throws PrimaryKeyCanBeNullException {
+		if(!c.notNull()) {
+			throw new PrimaryKeyCanBeNullException("A primary key column may not be null.");
+		}
 		//TODO throw Exception if !c.notNull()
 		addColumn(c);
 		_primaryKeys.add(c.getName());

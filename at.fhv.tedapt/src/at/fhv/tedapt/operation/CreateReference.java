@@ -9,6 +9,7 @@ import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 
+import at.fhv.tedapt.exception.PrimaryKeyCanBeNullException;
 import at.fhv.tedapt.flyway.FlywayHandler;
 import at.fhv.tedapt.flyway.change.AddColumn;
 import at.fhv.tedapt.flyway.change.AddReferenceColumn;
@@ -115,8 +116,15 @@ public class CreateReference extends OperationImplementation {
 				ct.addColumn(c2);
 				ct.addForeignKey(c1, superClass.getName(), "(e_id)");
 				ct.addForeignKey(new Column(type.getName()+"_e_id", "bigint(20)", true), refSuperClass.getName(), "(e_id)");
-				ct.addPrimaryKey(c1);
-				ct.addPrimaryKey(c2);
+				
+				try {
+					ct.addPrimaryKey(c1);
+					ct.addPrimaryKey(c2);
+				} catch (PrimaryKeyCanBeNullException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 
 			} else {
 				// add column in containing class

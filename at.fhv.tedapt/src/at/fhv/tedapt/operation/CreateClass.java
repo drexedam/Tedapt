@@ -13,6 +13,7 @@ import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 
+import at.fhv.tedapt.exception.PrimaryKeyCanBeNullException;
 import at.fhv.tedapt.flyway.FlywayHandler;
 import at.fhv.tedapt.flyway.change.CreateIndex;
 import at.fhv.tedapt.flyway.change.CreateTable;
@@ -56,7 +57,12 @@ public class CreateClass extends OperationImplementation {
 		//Only super class needs to be represented as table
 		if(superClasses.isEmpty()) {
 			CreateTable ct = new CreateTable(name);
-			ct.addPrimaryKey(new Column("e_id", "bigint(20)", true, true));
+			
+			try {
+				ct.addPrimaryKey(new Column("e_id", "bigint(20)", true, true));
+			} catch (PrimaryKeyCanBeNullException e) {
+				e.printStackTrace();
+			}
 			
 			Column dType = new Column("dtype", "varchar(255)", true);
 			ct.addColumn(dType);

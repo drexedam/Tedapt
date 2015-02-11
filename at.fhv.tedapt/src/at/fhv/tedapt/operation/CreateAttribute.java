@@ -10,6 +10,7 @@ import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 
+import at.fhv.tedapt.exception.PrimaryKeyCanBeNullException;
 import at.fhv.tedapt.flyway.DatabaseHandler;
 import at.fhv.tedapt.flyway.FlywayHandler;
 import at.fhv.tedapt.flyway.change.AddColumn;
@@ -87,13 +88,27 @@ public class CreateAttribute extends OperationImplementation {
 			change = new AddColumn(superClass, c);
 		} else {
 			String tableName = eClass.getName()+"_"+name;
+			
 			CreateTable ct = new CreateTable(tableName);
 			Column pk = new Column(tableName+"_e_id", "bigint(20)");
-			ct.addPrimaryKey(pk);
+			try {
+				ct.addPrimaryKey(pk);
+			} catch (PrimaryKeyCanBeNullException e) {
+				e.printStackTrace();
+			}
+			
+			
 			Column elt = new Column("elt", DatabaseHandler.mapDataType(type));
 			ct.addColumn(elt);
+			
 			Column idx = new Column(tableName+"_idx", "int(11)");
-			ct.addPrimaryKey(idx);
+			try {
+				ct.addPrimaryKey(idx);
+			} catch (PrimaryKeyCanBeNullException e) {
+				e.printStackTrace();
+			}
+			
+			
 			ct.addForeignKey(idx, superClass, "e_id");
 			change = ct;			
 		}
