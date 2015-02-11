@@ -14,6 +14,7 @@ import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 
 import at.fhv.tedapt.flyway.FlywayHandler;
+import at.fhv.tedapt.flyway.change.CreateIndex;
 import at.fhv.tedapt.flyway.change.CreateTable;
 import at.fhv.tedapt.flyway.entity.Column;
 
@@ -57,10 +58,14 @@ public class CreateClass extends OperationImplementation {
 			CreateTable ct = new CreateTable(name);
 			ct.addPrimaryKey(new Column("e_id", "bigint(20)", true, true));
 			
-			ct.addColumn(new Column("dtype", "varchar(255)", true));
+			Column dType = new Column("dtype", "varchar(255)", true);
+			ct.addColumn(dType);
+			
 			ct.addColumn(new Column("e_version", "int(11)", true));
 			
 			FlywayHandler.addChange(ct);
+			
+			FlywayHandler.addChange(new CreateIndex(name+"dtype", name, dType));
 	
 			
 			FlywayHandler.saveChangelog(metamodel.getEPackages().get(0).getNsPrefix());
