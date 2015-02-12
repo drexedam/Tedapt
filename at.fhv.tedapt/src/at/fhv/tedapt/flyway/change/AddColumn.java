@@ -19,16 +19,23 @@ public class AddColumn implements Change {
 	 * @param column The column to be added
 	 */
 	public AddColumn(String tableName, Column column) {
-		_tableName = tableName;
+		_tableName = tableName.toLowerCase();
 		_column = column;
 	}
 	
 	
 	@Override
 	public String getSQL() {
-		StringBuilder sb = new StringBuilder("ALTER TABLE "+_tableName.toLowerCase()+" ADD "+_column.getName().toLowerCase()+" "+_column.getType());
+		StringBuilder sb = new StringBuilder("ALTER TABLE ");
+		sb.append(_tableName);
+		sb.append(" ADD ");
+		sb.append(_column.getName());
+		sb.append(" ");
+		sb.append(_column.getType());
+				
 		if(_column.getDefault() != null) {
-			sb.append(" DEFAULT "+_column.getDefault());
+			sb.append(" DEFAULT ");
+			sb.append(_column.getDefault());
 		}
 		
 		if(_column.notNull()) {

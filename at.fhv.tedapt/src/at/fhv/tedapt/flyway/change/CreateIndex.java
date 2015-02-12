@@ -20,9 +20,9 @@ public class CreateIndex implements Change {
 	 * @param isUnique If duplicated values are allowed
 	 */
 	public CreateIndex(String indexName, String tableName, String columnName, boolean isUnique) {
-		_iName = indexName;
-		_tableName = tableName;
-		_columnName = columnName;
+		_iName = indexName.toLowerCase();
+		_tableName = tableName.toLowerCase();
+		_columnName = columnName.toLowerCase();
 		_isUnique = isUnique;
 	}
 	
