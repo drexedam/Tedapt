@@ -46,7 +46,7 @@ public class MigrateDialog extends TitleAreaDialog {
 		
 		_txtNsURI = new Text(container, SWT.BORDER);
 		_txtNsURI.setLayoutData(dNsURI);
-		_txtNsURI.setText(FlywayHandler.getNSURI());
+		_txtNsURI.setText(FlywayHandler.getNSPrefix());
 		
 		return area;
 	}

@@ -27,7 +27,7 @@ public class FlywayHandler {
 	
 	private static long _version;
 	private static boolean _migrated;
-	private static String _nsURI = "";
+	private static String _nsPrefix = "";
 	
 	/**
 	 * 
@@ -50,7 +50,7 @@ public class FlywayHandler {
 				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_UNAME), 
 				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PW));
 
-		flyway.setLocations("filesystem:"+_saveTo+_nsURI);
+		flyway.setLocations("filesystem:"+_saveTo+_nsPrefix);
 		flyway.migrate();
 	
 		_migrated = true;
@@ -74,12 +74,12 @@ public class FlywayHandler {
 			}
 			
 			//TODO redo saving
-			File d = new File(_saveTo+_nsURI);
+			File d = new File(_saveTo+_nsPrefix);
 			if(!d.exists()) {
 				d.mkdirs();
 			}
 			System.out.println(d.getCanonicalPath());
-			File f = new File(_saveTo+_nsURI+"/V"+_version+"__tedapt_changelog.sql");
+			File f = new File(_saveTo+_nsPrefix+"/V"+_version+"__tedapt_changelog.sql");
 
 			FileWriter fw = new FileWriter(f,true);
 			fw.write(getLog().getSQL());
@@ -104,22 +104,22 @@ public class FlywayHandler {
 	 * Saves the changelog to the file system. 
 	 * Only logs saved to the proper directory will be detected by flyway.
 	 */
-	public static void saveChangelog(String nsURI) {
-		setNSUIR(nsURI);
+	public static void saveChangelog(String nsPrefix) {
+		setNSPrefix(nsPrefix);
 		saveChangelog();
 	}
 	
 	/**
 	 * 
-	 * @return The current nsURI
+	 * @return The current nsPrefix
 	 */
-	public static String getNSURI() {
-		return _nsURI.replace("/", "");
+	public static String getNSPrefix() {
+		return _nsPrefix.replace("/", "");
 	}
 	
-	public static void setNSUIR(String value) {
-		if(!_nsURI.equals(value)) {
-			_nsURI = "/"+value;
+	public static void setNSPrefix(String value) {
+		if(!_nsPrefix.equals(value)) {
+			_nsPrefix = "/"+value;
 			readVersionInfo();
 		}
 		
@@ -130,7 +130,7 @@ public class FlywayHandler {
 	 * Reads version information from corresponding json file
 	 */
 	private static void readVersionInfo() {
-		File f = new File(_saveTo+_nsURI+".json");
+		File f = new File(_saveTo+_nsPrefix+".json");
 		if(!f.exists()) {
 			_version = 1;
 			_migrated = false;
@@ -158,7 +158,7 @@ public class FlywayHandler {
 		jobject.put("version", new Integer((int) _version));
 		jobject.put("migrated", new Boolean(_migrated));
 		
-		File f = new File(_saveTo+_nsURI+".json");
+		File f = new File(_saveTo+_nsPrefix+".json");
 		
 		try {
 			FileWriter fw = new FileWriter(f);

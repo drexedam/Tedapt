@@ -17,7 +17,7 @@ public class MigrateHandler extends AbstractHandler {
 			if(md.getNSURI() == null || md.getNSURI().isEmpty()) {
 				return null;
 			}
-			FlywayHandler.setNSUIR(md.getNSURI());
+			FlywayHandler.setNSPrefix(md.getNSURI());
 			System.out.println(md.getNSURI());
 		}
 //		MigrateDialog md = new MigrateDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
