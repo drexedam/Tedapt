@@ -1,7 +1,6 @@
 package at.fhv.tedapt.preferences;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Composite;
@@ -42,7 +41,6 @@ public class TedaptPreferences
 	 */
 	public void createFieldEditors() {
 		StringFieldEditor uName, uPW, dbAdr, dbName;
-		IntegerFieldEditor clVersion;
 		RadioGroupFieldEditor dbms;
 		
 		uName = new StringFieldEditor(PreferenceConstants.P_UNAME, "Database &username", getFieldEditorParent());
@@ -65,8 +63,6 @@ public class TedaptPreferences
 		dbName = new StringFieldEditor(PreferenceConstants.DB_NAME, "Database &name", getFieldEditorParent());
 		dbName.setEmptyStringAllowed(false);
 		
-		clVersion = new IntegerFieldEditor(PreferenceConstants.CL_VERSION, "Changelog &version", getFieldEditorParent());
-		clVersion.setEnabled(false, getFieldEditorParent());
 		
 		dbms = new RadioGroupFieldEditor(PreferenceConstants.DB_MS, 
 				"Database management &system", 1, new String[][] {
@@ -81,7 +77,6 @@ public class TedaptPreferences
 		addField(dbAdr);
 		addField(dbName);
 		addField(dbms);
-		addField(clVersion);
 		
 	}
 

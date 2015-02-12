@@ -12,7 +12,6 @@ public class PreferenceConstants {
 	public static final String DB_NAME = "DB_NAME";	
 	public static final String DB_MS = "DBMS";
 	
-	public static final String CL_VERSION = "CHANGE_LOG_VERSION";
 	
 	//Supported DBMS
 	public static final String DBMS_HSQL = "HSQL";

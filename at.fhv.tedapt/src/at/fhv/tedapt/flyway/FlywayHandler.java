@@ -1,15 +1,14 @@
 package at.fhv.tedapt.flyway;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.flywaydb.core.Flyway;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import at.fhv.tedapt.Activator;
 import at.fhv.tedapt.flyway.change.Change;
@@ -24,6 +23,11 @@ import at.fhv.tedapt.preferences.PreferenceConstants;
 public class FlywayHandler {
 
 	private static Changelog _changeLog;
+	private static final String _saveTo = "./plugins/at.fhv.tedapt/logs";
+	
+	private static long _version;
+	private static boolean _migrated;
+	private static String _nsURI = "";
 	
 	/**
 	 * 
@@ -44,20 +48,18 @@ public class FlywayHandler {
 		Flyway flyway = new Flyway();
 		flyway.setDataSource(DatabaseHandler.getJDBCURL(),
 				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_UNAME), 
-				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PW));		
-		
-		flyway.setLocations("filesystem:./"+_folderPath);
+				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PW));
+
+		flyway.setLocations("filesystem:"+_saveTo+_nsURI);
 		flyway.migrate();
-		
-		int version = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.CL_VERSION);
-		Activator.getDefault().getPreferenceStore().setValue(PreferenceConstants.CL_VERSION, ++version);
+	
+		_migrated = true;
+		saveVersionInfo();
 
 	}
 	
-	/**
-	 * Saves the changelog to the file system. Only logs saved to the proper directory will be detected by flyway.
-	 */
-	public static void saveChangelog() {
+
+	private static void saveChangelog() {
 
 		if(getLog().isEmpty()) {
 			return;
@@ -65,13 +67,19 @@ public class FlywayHandler {
 		
 		try {
 
-			int version = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.CL_VERSION);
-			//TODO redo saving
-			File d = new File("./"+_folderPath);
-			if(!d.exists()) {
-				d.mkdir();
+			if(_migrated) {
+				_version++;
+				_migrated = false;
+				saveVersionInfo();
 			}
-			File f = new File("./"+_folderPath+"/V"+version+"__tedapt_changelog.sql");
+			
+			//TODO redo saving
+			File d = new File(_saveTo+_nsURI);
+			if(!d.exists()) {
+				d.mkdirs();
+			}
+			System.out.println(d.getCanonicalPath());
+			File f = new File(_saveTo+_nsURI+"/V"+_version+"__tedapt_changelog.sql");
 
 			FileWriter fw = new FileWriter(f,true);
 			fw.write(getLog().getSQL());
@@ -83,15 +91,6 @@ public class FlywayHandler {
 		}
 	}
 	
-	private static String editorInputName() {
-		IWorkbench workBench = PlatformUI.getWorkbench();
-		IWorkbenchWindow window = workBench==null?null:workBench.getActiveWorkbenchWindow();
-		IWorkbenchPage page = window==null?null:window.getActivePage();
-		IEditorPart editor = page==null?null:page.getActiveEditor();
-		
-		
-		return editor==null?"":editor.getEditorInput().getName();
-	}
 	
 	/**
 	 * Adds a change to the changelog.
@@ -101,9 +100,73 @@ public class FlywayHandler {
 		getLog().addChange(c);
 	}
 
-	private static String _folderPath = "";
+	/**
+	 * Saves the changelog to the file system. 
+	 * Only logs saved to the proper directory will be detected by flyway.
+	 */
 	public static void saveChangelog(String nsURI) {
-		_folderPath = nsURI;
+		setNSUIR(nsURI);
 		saveChangelog();
+	}
+	
+	/**
+	 * 
+	 * @return The current nsURI
+	 */
+	public static String getNSURI() {
+		return _nsURI.replace("/", "");
+	}
+	
+	public static void setNSUIR(String value) {
+		if(!_nsURI.equals(value)) {
+			_nsURI = "/"+value;
+			readVersionInfo();
+		}
+		
+	}
+	
+
+	/**
+	 * Reads version information from corresponding json file
+	 */
+	private static void readVersionInfo() {
+		File f = new File(_saveTo+_nsURI+".json");
+		if(!f.exists()) {
+			_version = 1;
+			_migrated = false;
+			return;
+		}
+		
+		JSONParser jparser = new JSONParser();
+		
+		try {
+			JSONObject jobj = (JSONObject) jparser.parse(new FileReader(f));
+			_version = (Long) jobj.get("version");
+			_migrated = (boolean) jobj.get("migrated");
+		} catch (IOException | ParseException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/**
+	 * Writes version information to corresponding json file
+	 */
+	@SuppressWarnings("unchecked")
+	private static void saveVersionInfo() {
+		JSONObject jobject = new JSONObject();
+		jobject.put("version", new Integer((int) _version));
+		jobject.put("migrated", new Boolean(_migrated));
+		
+		File f = new File(_saveTo+_nsURI+".json");
+		
+		try {
+			FileWriter fw = new FileWriter(f);
+			fw.write(jobject.toJSONString());
+			fw.flush();
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

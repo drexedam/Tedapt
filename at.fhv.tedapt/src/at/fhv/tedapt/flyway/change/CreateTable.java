@@ -15,6 +15,8 @@ import at.fhv.tedapt.flyway.entity.ForeignKey;
  *
  */
 public class CreateTable implements Change {
+	
+	
 	private String _tableName;
 	private List<String> _primaryKeys;
 	private List<ForeignKey> _foreignKeys; 
@@ -75,7 +77,6 @@ public class CreateTable implements Change {
 		if(!c.notNull()) {
 			throw new PrimaryKeyCanBeNullException("A primary key column may not be null.");
 		}
-		//TODO throw Exception if !c.notNull()
 		addColumn(c);
 		_primaryKeys.add(c.getName());
 	}
@@ -114,7 +115,6 @@ public class CreateTable implements Change {
 			}
 			
 			Iterator<String> itPK = _primaryKeys.iterator();
-//			+",PRIMARY KEY ("+className+"_e_id,"+tableName+"_idx))";
 			sb.append(",PRIMARY KEY (");
 			while(itPK.hasNext()) {
 				sb.append(itPK.next().toLowerCase());

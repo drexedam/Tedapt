@@ -45,3 +45,8 @@ Export-Package: org.flywaydb.core,
  org.flywaydb.core.internal.util.scanner.classpath,
  org.flywaydb.core.internal.util.scanner.classpath.jboss,
  org.flywaydb.core.internal.util.scanner.filesystem
+Require-Bundle: com.mysql.jdbc;bundle-version="5.1.26";resolution:=optional,
+ com.db4o;bundle-version="8.0.249";resolution:=optional,
+ com.microsoft.sqlserver.jdbc;bundle-version="4.0.2206";resolution:=optional,
+ org.hsqldb;bundle-version="2.3.2";resolution:=optional,
+ org.postgresql;bundle-version="9.2.1003";resolution:=optional
