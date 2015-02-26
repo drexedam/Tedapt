@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<history:History xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:history="http://www.eclipse.org/emf/edapt/history/0.3">
+  <releases>
+    <changes xsi:type="history:CompositeChange">
+      <changes xsi:type="history:Create" element="example.ecore#/">
+        <changes xsi:type="history:Set" element="example.ecore#/" featureName="name"
+            dataValue="example"/>
+        <changes xsi:type="history:Set" element="example.ecore#/" featureName="nsURI"
+            dataValue="http://www.fhv.at/example"/>
+        <changes xsi:type="history:Set" element="example.ecore#/" featureName="nsPrefix"
+            dataValue="example"/>
+      </changes>
+      <changes xsi:type="history:Create" target="example.ecore#/" referenceName="eClassifiers"
+          element="example.ecore#//ExampleClass">
+        <changes xsi:type="history:Set" element="example.ecore#//ExampleClass" featureName="name"
+            dataValue="ExampleClass"/>
+      </changes>
+      <changes xsi:type="history:Create" target="example.ecore#//ExampleClass" referenceName="eStructuralFeatures"
+          element="#//@releases.0/@changes.2/@changes.0/@element">
+        <changes xsi:type="history:Set" element="#//@releases.0/@changes.2/@changes.0/@element"
+            featureName="name" dataValue="myInteger"/>
+        <changes xsi:type="history:Set" element="#//@releases.0/@changes.2/@changes.0/@element"
+            featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      </changes>
+    </changes>
+    <changes xsi:type="history:MigrationChange" migration="IntegerToBooleanExample">
+      <changes xsi:type="history:OperationChange">
+        <changes xsi:type="history:Create" target="example.ecore#//ExampleClass" referenceName="eStructuralFeatures"
+            element="example.ecore#//ExampleClass/boolean1">
+          <changes xsi:type="history:Set" element="example.ecore#//ExampleClass/boolean1"
+              featureName="name" dataValue="boolean1"/>
+          <changes xsi:type="history:Set" element="example.ecore#//ExampleClass/boolean1"
+              featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        </changes>
+        <operation name="newAttribute">
+          <parameters name="eClass">
+            <referenceValue element="example.ecore#//ExampleClass"/>
+          </parameters>
+          <parameters name="name">
+            <dataValue>boolean1</dataValue>
+          </parameters>
+          <parameters name="type">
+            <referenceValue element="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+          </parameters>
+          <parameters name="lowerBound">
+            <dataValue>0</dataValue>
+          </parameters>
+          <parameters name="upperBound">
+            <dataValue>1</dataValue>
+          </parameters>
+          <parameters name="defaultValue">
+            <dataValue xsi:nil="true"/>
+          </parameters>
+        </operation>
+      </changes>
+      <changes xsi:type="history:OperationChange">
+        <changes xsi:type="history:Create" target="example.ecore#//ExampleClass" referenceName="eStructuralFeatures"
+            element="example.ecore#//ExampleClass/boolean2">
+          <changes xsi:type="history:Set" element="example.ecore#//ExampleClass/boolean2"
+              featureName="name" dataValue="boolean2"/>
+          <changes xsi:type="history:Set" element="example.ecore#//ExampleClass/boolean2"
+              featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        </changes>
+        <operation name="newAttribute">
+          <parameters name="eClass">
+            <referenceValue element="example.ecore#//ExampleClass"/>
+          </parameters>
+          <parameters name="name">
+            <dataValue>boolean2</dataValue>
+          </parameters>
+          <parameters name="type">
+            <referenceValue element="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+          </parameters>
+          <parameters name="lowerBound">
+            <dataValue>0</dataValue>
+          </parameters>
+          <parameters name="upperBound">
+            <dataValue>1</dataValue>
+          </parameters>
+          <parameters name="defaultValue">
+            <dataValue xsi:nil="true"/>
+          </parameters>
+        </operation>
+      </changes>
+    </changes>
+    <changes xsi:type="history:OperationChange">
+      <changes xsi:type="history:Delete" target="example.ecore#//ExampleClass" referenceName="eStructuralFeatures">
+        <element xsi:type="ecore:EAttribute" name="myInteger" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      </changes>
+      <operation name="deleteFeature2">
+        <parameters name="feature">
+          <referenceValue element="#//@releases.0/@changes.2/@changes.0/@element"/>
+        </parameters>
+      </operation>
+    </changes>
+  </releases>
+</history:History>
