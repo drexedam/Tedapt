@@ -5,10 +5,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.util.URI;
 import org.flywaydb.core.Flyway;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import at.fhv.tedapt.Activator;
 import at.fhv.tedapt.flyway.change.Change;
@@ -22,12 +30,15 @@ import at.fhv.tedapt.preferences.PreferenceConstants;
  */
 public class FlywayHandler {
 
-	private static Changelog _changeLog;
-	private static final String _saveTo = "./plugins/at.fhv.tedapt/logs";
+	public static final String TEDAPT_POSTFIX = "_tedapt";
+	public static final String CHANGELOG_FOLDER = "/changelogs";
 	
+	private static Changelog _changeLog;
+	
+	
+	private static long _numOfTask = 1;
 	private static long _version;
-	private static boolean _migrated;
-	private static String _nsPrefix = "";
+	private static String _projectFolder = "";
 	
 	/**
 	 * 
@@ -44,48 +55,60 @@ public class FlywayHandler {
 	/**
 	 * Updates the database to the newest version based on all changelogs safed by.
 	 */
-	public static void migrateChanges() {
+	public static void migrateChanges(String path) {
 		Flyway flyway = new Flyway();
+		flyway.setBaselineOnMigrate(true);
 		flyway.setDataSource(DatabaseHandler.getJDBCURL(),
 				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_UNAME), 
 				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PW));
 
-		flyway.setLocations("filesystem:"+_saveTo+_nsPrefix);
+		flyway.setLocations("filesystem:"+path);
 		flyway.migrate();
 	
-		_migrated = true;
 		saveVersionInfo();
 
 	}
 	
 
-	private static void saveChangelog() {
+	public static void saveChangelog(URI uri, String operationName) {
 
+		setProjectFolder(uri);
+		
 		if(getLog().isEmpty()) {
 			return;
 		}
 		
 		try {
-
-			if(_migrated) {
-				_version++;
-				_migrated = false;
-				saveVersionInfo();
-			}
 			
 			//TODO redo saving
-			File d = new File(_saveTo+_nsPrefix);
+			File d = new File(Platform.getLocation()+getChangelogFolder());
 			if(!d.exists()) {
 				d.mkdirs();
 			}
+			
+			int tempV = getNumOfMigrations(uri);
+			
+			if(tempV != _version) {
+				_version = tempV;
+				_numOfTask = 1;
+			}
+			
+			
 			System.out.println(d.getCanonicalPath());
-			File f = new File(_saveTo+_nsPrefix+"/V"+_version+"__tedapt_changelog.sql");
+			File f = new File(Platform.getLocation()
+								+getChangelogFolder()
+								+"/V"+_version+"_"+_numOfTask+"__"+operationName.replace(" ", "_")+".sql");
 
 			FileWriter fw = new FileWriter(f,true);
 			fw.write(getLog().getSQL());
 			fw.flush();
 			fw.close();
+			
 			_changeLog = new Changelog();
+			_numOfTask++;
+			
+			saveVersionInfo();
+			
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -100,40 +123,39 @@ public class FlywayHandler {
 		getLog().addChange(c);
 	}
 
-	/**
-	 * Saves the changelog to the file system. 
-	 * Only logs saved to the proper directory will be detected by flyway.
-	 */
-	public static void saveChangelog(String nsPrefix) {
-		setNSPrefix(nsPrefix);
-		saveChangelog();
-	}
 	
 	/**
 	 * 
 	 * @return The current nsPrefix
 	 */
-	public static String getNSPrefix() {
-		return _nsPrefix.replace("/", "");
+	public static String getProjectFolder() {
+		return _projectFolder;
 	}
 	
-	public static void setNSPrefix(String value) {
-		if(!_nsPrefix.equals(value)) {
-			_nsPrefix = "/"+value;
+	public static void setProjectFolder(URI uri) {
+		String temp = uri.toPlatformString(false);
+		temp = temp.substring(0, temp.length()-(".history").length());
+		
+		if(!_projectFolder.equals(temp)) {
+			_projectFolder = temp;
 			readVersionInfo();
 		}
 		
 	}
 	
-
+	public static String getChangelogFolder() {
+		return getProjectFolder()+TEDAPT_POSTFIX+CHANGELOG_FOLDER;
+	}
+	
+	
 	/**
 	 * Reads version information from corresponding json file
 	 */
 	private static void readVersionInfo() {
-		File f = new File(_saveTo+_nsPrefix+".json");
+		File f = new File(Platform.getLocation()+getChangelogFolder()+".json");
 		if(!f.exists()) {
 			_version = 1;
-			_migrated = false;
+			_numOfTask = 1;
 			return;
 		}
 		
@@ -142,7 +164,7 @@ public class FlywayHandler {
 		try {
 			JSONObject jobj = (JSONObject) jparser.parse(new FileReader(f));
 			_version = (Long) jobj.get("version");
-			_migrated = (boolean) jobj.get("migrated");
+			_numOfTask = (Long) jobj.get("numOfTask");
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 		}
@@ -156,17 +178,35 @@ public class FlywayHandler {
 	private static void saveVersionInfo() {
 		JSONObject jobject = new JSONObject();
 		jobject.put("version", new Integer((int) _version));
-		jobject.put("migrated", new Boolean(_migrated));
+		jobject.put("numOfTask", new Integer((int) _numOfTask));
 		
-		File f = new File(_saveTo+_nsPrefix+".json");
+		File f = new File(Platform.getLocation()+getChangelogFolder()+".json");
 		
 		try {
-			FileWriter fw = new FileWriter(f);
+			FileWriter fw = new FileWriter(f, false);
 			fw.write(jobject.toJSONString());
 			fw.flush();
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static int getNumOfMigrations(URI uri) {
+		File xmlFile = new File(Platform.getLocation()+uri.toPlatformString(false));
+
+		try {
+			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile);
+			NodeList nList = doc.getElementsByTagName("releases");
+			return nList.getLength();
+		} catch (SAXException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (ParserConfigurationException e1) {
+			e1.printStackTrace();
+		}
+		
+		return -1;
 	}
 }

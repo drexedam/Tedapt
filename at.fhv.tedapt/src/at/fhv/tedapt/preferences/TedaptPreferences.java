@@ -66,10 +66,11 @@ public class TedaptPreferences
 		
 		dbms = new RadioGroupFieldEditor(PreferenceConstants.DB_MS, 
 				"Database management &system", 1, new String[][] {
-					{"HSQL", PreferenceConstants.DBMS_HSQL},
-					{"MySQL", PreferenceConstants.DBMS_MYSQL},
-					{"PostgreSQL", PreferenceConstants.DBMS_PSQL},
-					{"SQL Server", PreferenceConstants.DBMS_SQLSERV}},
+					//{"HSQL", PreferenceConstants.DBMS_HSQL},
+					{"MySQL", PreferenceConstants.DBMS_MYSQL}//,
+					//{"PostgreSQL", PreferenceConstants.DBMS_PSQL},
+					//{"SQL Server", PreferenceConstants.DBMS_SQLSERV}
+					},
 				getFieldEditorParent());
 				
 		addField(uName);

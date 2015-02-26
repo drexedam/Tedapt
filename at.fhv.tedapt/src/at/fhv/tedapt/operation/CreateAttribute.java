@@ -7,6 +7,7 @@ import org.eclipse.emf.edapt.declaration.EdaptConstraint;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
 import org.eclipse.emf.edapt.declaration.EdaptParameter;
 import org.eclipse.emf.edapt.declaration.OperationImplementation;
+import org.eclipse.emf.edapt.history.util.HistoryUtils;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 
@@ -115,8 +116,9 @@ public class CreateAttribute extends OperationImplementation {
 		
 		FlywayHandler.addChange(change);
 		
-		FlywayHandler.saveChangelog(metamodel.getEPackages().get(0).getNsPrefix());
-		
+		FlywayHandler.saveChangelog(
+				HistoryUtils.getHistoryURI(
+						metamodel.getEPackages().get(0).eResource()), "Create Attribute "+name);
 	}
 
 

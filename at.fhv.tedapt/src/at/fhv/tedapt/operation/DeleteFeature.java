@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
 import org.eclipse.emf.edapt.declaration.EdaptParameter;
 import org.eclipse.emf.edapt.declaration.OperationImplementation;
+import org.eclipse.emf.edapt.history.util.HistoryUtils;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
@@ -23,6 +24,7 @@ import at.fhv.tedapt.helper.CommonTasks;
  * @version 0.1
  *
  */
+@SuppressWarnings("restriction")
 @EdaptOperation(identifier="deleteFeaterTedapt", label="Delete Feature Tedapt", description="Deletes a feature and its corresponding DB entries.")
 public class DeleteFeature extends OperationImplementation {
 
@@ -48,8 +50,9 @@ public class DeleteFeature extends OperationImplementation {
 				FlywayHandler.addChange(new DeleteTable(contClass.getName()+"_"+atr.getName()));
 			}
 			
-			FlywayHandler.saveChangelog(metamodel.getEPackages().get(0).getNsPrefix());
-			
+			FlywayHandler.saveChangelog(
+					HistoryUtils.getHistoryURI(
+							metamodel.getEPackages().get(0).eResource()), "Delete Feature "+feature.getName());
 		}
 		
 		

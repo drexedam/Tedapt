@@ -15,16 +15,37 @@
       </category>
    </extension>
    <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="at.fhv.tedapt.migration">
+         <with
+               variable="selection">
+            <iterate
+                  ifEmpty="false">
+               <adapt
+                     type="org.eclipse.core.resources.IResource">
+               </adapt>
+            </iterate>
+         </with>
+      </definition>
+   </extension>
+   <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <menu
                id="at.fhv.tedapt.menu"
                label="Tedapt">
             <command
                   commandId="at.fhv.tedapt.Migrate"
-                  label="Migrate"
+                  label="Migrate Database"
                   style="push">
+                  <visibleWhen
+                     checkEnabled="false">
+                  <reference
+                        definitionId="at.fhv.tedapt.migration">
+                  </reference>
+               </visibleWhen>
             </command>
          </menu>
       </menuContribution>

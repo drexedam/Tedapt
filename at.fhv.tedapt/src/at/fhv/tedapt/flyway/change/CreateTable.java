@@ -75,6 +75,7 @@ public class CreateTable implements Change {
 	 */
 	public void addPrimaryKey(Column c) throws PrimaryKeyCanBeNullException {
 		if(!c.notNull()) {
+			//SEE http://dev.mysql.com/doc/refman/5.1/en/create-table.html
 			throw new PrimaryKeyCanBeNullException("A primary key column may not be null.");
 		}
 		addColumn(c);

@@ -11,8 +11,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import at.fhv.tedapt.flyway.FlywayHandler;
-
 public class MigrateDialog extends TitleAreaDialog {
 
 	private Text _txtNsURI;
@@ -40,14 +38,17 @@ public class MigrateDialog extends TitleAreaDialog {
 		Label lblnsURI = new Label(container, SWT.NONE);
 		lblnsURI.setText("nsURI");
 		
-		GridData dNsURI = new GridData();
-		dNsURI.grabExcessHorizontalSpace = true;
-		dNsURI.horizontalAlignment = GridData.FILL;
 		
-		_txtNsURI = new Text(container, SWT.BORDER);
-		_txtNsURI.setLayoutData(dNsURI);
-		_txtNsURI.setText(FlywayHandler.getNSPrefix());
+		//TODO: Redo
 		
+//		GridData dNsURI = new GridData();
+//		dNsURI.grabExcessHorizontalSpace = true;
+//		dNsURI.horizontalAlignment = GridData.FILL;
+//		
+//		_txtNsURI = new Text(container, SWT.BORDER);
+//		_txtNsURI.setLayoutData(dNsURI);
+//		_txtNsURI.setText(FlywayHandler.getNSPrefix());
+//		
 		return area;
 	}
 	

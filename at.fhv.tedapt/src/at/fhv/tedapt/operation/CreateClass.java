@@ -9,6 +9,7 @@ import org.eclipse.emf.edapt.common.MetamodelFactory;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
 import org.eclipse.emf.edapt.declaration.EdaptParameter;
 import org.eclipse.emf.edapt.declaration.OperationImplementation;
+import org.eclipse.emf.edapt.history.util.HistoryUtils;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
@@ -56,6 +57,17 @@ public class CreateClass extends OperationImplementation {
 		
 		//Only super class needs to be represented as table
 		if(superClasses.isEmpty()) {
+//			DSLContext create = DSL.using(SQLDialect.MYSQL);
+//			String createTable = create.createTable(name)
+//					.column("e_id", SQLDataType.BIGINT.nullable(false))
+//					.column("dtype", SQLDataType.VARCHAR.length(255).nullable(false))
+//					.column("e_version", SQLDataType.INTEGER.nullable(false))
+//					.getSQL();
+//			
+//			String addPK = create.alterTable(name)
+//					.add(DSL.constraint("e_id_pk").primaryKey("e_id"))
+//					.getSQL();
+			
 			CreateTable ct = new CreateTable(name);
 			
 			try {
@@ -74,7 +86,9 @@ public class CreateClass extends OperationImplementation {
 			FlywayHandler.addChange(new CreateIndex(name+"dtype", name, dType));
 	
 			
-			FlywayHandler.saveChangelog(metamodel.getEPackages().get(0).getNsPrefix());
+			FlywayHandler.saveChangelog(
+					HistoryUtils.getHistoryURI(
+							metamodel.getEPackages().get(0).eResource()), "Create Class "+name);
 		}
 			
 	}
