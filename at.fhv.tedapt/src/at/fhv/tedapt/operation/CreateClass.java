@@ -15,10 +15,13 @@ import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 
 import at.fhv.tedapt.exception.PrimaryKeyCanBeNullException;
+import at.fhv.tedapt.flyway.DatabaseHandler;
 import at.fhv.tedapt.flyway.FlywayHandler;
 import at.fhv.tedapt.flyway.change.CreateIndex;
 import at.fhv.tedapt.flyway.change.CreateTable;
 import at.fhv.tedapt.flyway.entity.Column;
+
+import org.jooq.SQLDialect;
 
 
 /**
@@ -57,16 +60,13 @@ public class CreateClass extends OperationImplementation {
 		
 		//Only super class needs to be represented as table
 		if(superClasses.isEmpty()) {
-//			DSLContext create = DSL.using(SQLDialect.MYSQL);
-//			String createTable = create.createTable(name)
-//					.column("e_id", SQLDataType.BIGINT.nullable(false))
-//					.column("dtype", SQLDataType.VARCHAR.length(255).nullable(false))
-//					.column("e_version", SQLDataType.INTEGER.nullable(false))
-//					.getSQL();
-//			
-//			String addPK = create.alterTable(name)
-//					.add(DSL.constraint("e_id_pk").primaryKey("e_id"))
-//					.getSQL();
+			
+			//Special case: Primary Key needs to be auto_increment -> By now not possible with jOOQ.
+			//TODO DBMS independent solution (By now only MySQL)
+			
+			if(!SQLDialect.MYSQL.equals(DatabaseHandler.getDialect())) {
+				return;
+			}
 			
 			CreateTable ct = new CreateTable(name);
 			

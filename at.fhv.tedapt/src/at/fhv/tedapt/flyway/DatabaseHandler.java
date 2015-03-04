@@ -1,6 +1,9 @@
 package at.fhv.tedapt.flyway;
 
 import org.eclipse.emf.ecore.EDataType;
+import org.jooq.DataType;
+import org.jooq.SQLDialect;
+import org.jooq.impl.SQLDataType;
 
 import at.fhv.tedapt.Activator;
 import at.fhv.tedapt.preferences.PreferenceConstants;
@@ -60,6 +63,21 @@ public class DatabaseHandler {
 		
 	}
 	
+	public static SQLDialect getDialect() {
+		switch (Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.DB_MS)) {
+		case PreferenceConstants.DBMS_HSQL:
+			return SQLDialect.HSQLDB;
+		case PreferenceConstants.DBMS_PSQL:
+			return SQLDialect.POSTGRES;
+		case PreferenceConstants.DBMS_SQLSERV:
+			//SQL Server not support by free version
+		case PreferenceConstants.DBMS_MYSQL:
+		default:
+			return SQLDialect.MYSQL;
+		
+	}
+	}
+	
 	/**
 	 * 
 	 * @param dataType Some EMF data type
@@ -99,6 +117,43 @@ public class DatabaseHandler {
 		case "EString":
 		default:
 			return "varchar(255)";
+		}
+	}
+	
+	public static DataType<?> mapDataTypeJOOQ(EDataType dataType) {
+		String dType = dataType.getName();
+		switch (dType) {
+		case "EBigDecimal":
+		case "EBigInteger":
+			return SQLDataType.DECIMAL;
+		case "EBoolean":
+		case "EBooleanObject":
+			return SQLDataType.BIT.length(1);//"bit(1)";
+		case "EByte":
+		case "EByteObject":
+		case "EByteArray":
+			return SQLDataType.TINYINT;//"tinyint(4)";
+		case "EChar":
+		case "ECharacterObject":
+			return SQLDataType.CHAR.length(1);//"char(1)";
+		case "EDate":
+			return SQLDataType.DATE; //"datetime";
+		case "EFloat":
+		case "EFloatObject":
+			return SQLDataType.FLOAT; //"float";
+		case "EInt":
+		case "EIntegerObject":
+			return SQLDataType.INTEGER; //"int(11)";
+		case "ELong":
+		case "ELongObject":
+			return SQLDataType.BIGINT; //"bigint(20)";
+		case "EShort":
+		case "EShortObject":
+			return SQLDataType.SMALLINT; //"smallint(6)";
+		case "EJavaObject":
+		case "EString":
+		default:
+			return SQLDataType.VARCHAR.length(255); //"varchar(255)";
 		}
 	}
 }

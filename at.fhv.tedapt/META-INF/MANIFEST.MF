@@ -19,8 +19,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.edapt.history,
  org.apache.log4j,
  at.fhv.tedapt.library.flyaway;bundle-version="1.0.0",
- at.fhv.tedapt.library.jsonsimple;bundle-version="1.0.0"
+ at.fhv.tedapt.library.jsonsimple;bundle-version="1.0.0",
+ at.fhv.tedapt.library.jooq;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: at.fhv.tedapt;uses:="org.osgi.framework,org.eclipse.emf.edapt.declaration,org.eclipse.ui.plugin"
+Export-Package: at.fhv.tedapt;uses:="org.osgi.framework,org.eclipse.ui.plugin"
 Import-Package: org.eclipse.jdt.core

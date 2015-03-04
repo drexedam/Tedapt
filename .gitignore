@@ -1,6 +1,5 @@
 at.fhv.tedapt/bin/
 at.fhv.tedapt.test/bin/
-*.class
 at.fhv.tedapt.customexample.edit/
 at.fhv.tedapt.customexample.editor/
 at.fhv.tedapt.customexample.tests/

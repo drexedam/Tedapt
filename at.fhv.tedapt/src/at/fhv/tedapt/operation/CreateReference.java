@@ -9,12 +9,18 @@ import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.history.util.HistoryUtils;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
+import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 
 import at.fhv.tedapt.exception.PrimaryKeyCanBeNullException;
+import at.fhv.tedapt.flyway.DatabaseHandler;
 import at.fhv.tedapt.flyway.FlywayHandler;
 import at.fhv.tedapt.flyway.change.AddColumn;
 import at.fhv.tedapt.flyway.change.AddReferenceColumn;
+import at.fhv.tedapt.flyway.change.Change;
 import at.fhv.tedapt.flyway.change.CreateTable;
+import at.fhv.tedapt.flyway.change.SQLChange;
 import at.fhv.tedapt.flyway.entity.Column;
 import at.fhv.tedapt.helper.CommonTasks;
 
@@ -79,8 +85,18 @@ public class CreateReference extends OperationImplementation {
 		EClass superClass = CommonTasks.getMostAbstract(eClass);
 		EClass refSuperClass = CommonTasks.getMostAbstract(type);
 		boolean notNull = (upperBound == 1 && lowerBound == 1);
-
+		Change change;
+		DSLContext context = DSL.using(DatabaseHandler.getDialect());
 		if(containment) {
+			String addCol1 = context.alterTable(refSuperClass.getName())
+					.add("econtainer_class", SQLDataType.VARCHAR.length(255)).getSQL();
+			
+			String addCol2 = context.alterTable(refSuperClass.getName())
+					.add("e_container", SQLDataType.VARCHAR.length(255)).getSQL();
+			
+			String addCol3 = context.alterTable(refSuperClass.getName())
+					.add("e_container_feature_name", SQLDataType.VARCHAR.length(255)).getSQL();
+			
 			//create containment columns
 			FlywayHandler.addChange(new AddColumn(
 					refSuperClass.getName(), 
@@ -92,50 +108,112 @@ public class CreateReference extends OperationImplementation {
 					refSuperClass.getName(),
 					new Column("e_container_feature_name", "varchar(255)")));
 	
+			String addRefCol, addRef;
+			
 			if(upperBound != 1) {
 				// additional columns in (super-)class which is contained
-				FlywayHandler.addChange(new AddReferenceColumn(
-						new Column(superClass.getName()+"_"+name, "bigint(28)",notNull),
-						refSuperClass.getName(), 
-						superClass.getName(), 
-						"e_id"));
+				
+				addRefCol = context.alterTable(refSuperClass.getName())
+						.add(superClass.getName()+"_"+name, SQLDataType.BIGINT.nullable(!notNull)).getSQL();
+				
+				addRef = context.alterTable(refSuperClass.getName())
+						.add(DSL.constraint(superClass.getName()+"_"+name+"_fk")
+								.foreignKey(superClass.getName()+"_"+name)
+								.references(superClass.getName(), 
+										"e_id"))
+						.getSQL();
+				
+//				FlywayHandler.addChange(new AddReferenceColumn(
+//						new Column(superClass.getName()+"_"+name, "bigint(28)",notNull),
+//						refSuperClass.getName(), 
+//						superClass.getName(), 
+//						"e_id"));
 			} else {
 				// additional columns in (super-)class which contains the other class
-				FlywayHandler.addChange(new AddReferenceColumn(
-						new Column(type.getName()+"_"+name, "bigint(28)",notNull),
-						superClass.getName(), 
-						refSuperClass.getName(), 
-						"e_id"));
+				
+				addRefCol = context.alterTable(superClass.getName())
+						.add(type.getName()+"_"+name, SQLDataType.BIGINT.nullable(!notNull)).getSQL();
+				
+				addRef = context.alterTable(superClass.getName())
+						.add(DSL.constraint(type.getName()+"_"+name+"_fk")
+								.foreignKey(type.getName()+"_"+name)
+								.references(refSuperClass.getName(), 
+										"e_id"))
+						.getSQL();
+				
+//				FlywayHandler.addChange(new AddReferenceColumn(
+//						new Column(type.getName()+"_"+name, "bigint(28)",notNull),
+//						superClass.getName(), 
+//						refSuperClass.getName(), 
+//						"e_id"));
 			}
+			change = new SQLChange(addCol1, addCol2, addCol3, addRefCol, addRef);
 		} else {
 			if(upperBound != 1) {
 				// create table for reference
-				CreateTable ct = new CreateTable(eClass.getName()+"_"+name);
 				
-				Column c1 = new Column(eClass.getName()+"_e_id", "bigint(20)", true);
-				Column c2 = new Column(eClass.getName()+"_"+name+"_idx", "int(11)", true);
-				ct.addColumn(c2);
-				ct.addForeignKey(c1, superClass.getName(), "(e_id)");
-				ct.addForeignKey(new Column(type.getName()+"_e_id", "bigint(20)", true), refSuperClass.getName(), "(e_id)");
+				String createTable = context.createTable(eClass.getName()+"_"+name)
+						.column(eClass.getName()+"_e_id", SQLDataType.BIGINT.nullable(false))
+						.column(eClass.getName()+"_"+name+"_idx", SQLDataType.INTEGER.nullable(false))
+						.column(type.getName()+"_e_id", SQLDataType.BIGINT.nullable(false)).getSQL();
 				
-				try {
-					ct.addPrimaryKey(c1);
-					ct.addPrimaryKey(c2);
-				} catch (PrimaryKeyCanBeNullException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				String addPKs = context.alterTable(eClass.getName()+"_"+name)
+						.add(DSL.constraint(eClass.getName()+"_"+name+"_pk")
+								.primaryKey(eClass.getName()+"_e_id",eClass.getName()+"_"+name+"_idx"))
+						.getSQL();
 				
+				String addFK1 = context.alterTable(eClass.getName()+"_"+name)
+						.add(DSL.constraint(eClass.getName()+"_"+name+"_e_id_fk")
+								.foreignKey(eClass.getName()+"_e_id").references(superClass.getName(), "e_id"))
+								.getSQL();
+				
+				String addFK2 = context.alterTable(eClass.getName()+"_"+name)
+						.add(DSL.constraint(eClass.getName()+"_"+name+"_type_e_id_fk")
+								.foreignKey(type.getName()+"_e_id")
+								.references(refSuperClass.getName(), "e_id"))
+								.getSQL();
+				
+				change = new SQLChange(createTable, addPKs, addFK1, addFK2);
+				
+//				CreateTable ct = new CreateTable(eClass.getName()+"_"+name);
+//				
+//				Column c1 = new Column(eClass.getName()+"_e_id", "bigint(20)", true);
+//				Column c2 = new Column(eClass.getName()+"_"+name+"_idx", "int(11)", true);
+//				ct.addColumn(c2);
+//				ct.addForeignKey(c1, superClass.getName(), "(e_id)");
+//				ct.addForeignKey(new Column(type.getName()+"_e_id", "bigint(20)", true), refSuperClass.getName(), "(e_id)");
+//				
+//				try {
+//					ct.addPrimaryKey(c1);
+//					ct.addPrimaryKey(c2);
+//				} catch (PrimaryKeyCanBeNullException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				
 
 			} else {
 				// add column in containing class
-				FlywayHandler.addChange(new AddReferenceColumn(
-						new Column(type.getName()+"_"+name, "bigint(28)",notNull),
-						superClass.getName(), 
-						refSuperClass.getName(), 
-						"e_id"));
+				String addColumn = context.alterTable(superClass.getName())
+						.add(type.getName()+"_"+name, SQLDataType.BIGINT.nullable(!notNull))
+						.getSQL();
+				
+				String addFK = context.alterTable(superClass.getName())
+						.add(DSL.constraint(superClass.getName()+type.getName()+"_"+name+"_fk")
+								.foreignKey(type.getName()+"_"+name).references(refSuperClass.getName(), "e_id"))
+								.getSQL();
+				
+				change = new SQLChange(addColumn, addFK);
+//				
+//				FlywayHandler.addChange(new AddReferenceColumn(
+//						new Column(type.getName()+"_"+name, "bigint(28)",notNull),
+//						superClass.getName(), 
+//						refSuperClass.getName(), 
+//						"e_id"));
 			}
 		}
+		
+		FlywayHandler.addChange(change);
 		
 		FlywayHandler.saveChangelog(
 				HistoryUtils.getHistoryURI(
