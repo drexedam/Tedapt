@@ -11,5 +11,8 @@ Flyaway core library as plugin to be used by at.fhv.tedapt
 ### at.fhv.library.jsonsimple ###
 JSON.simple library as plugin to be used by at.fhv.tedapt
 
+### at.fhv.library.jooq ###
+jOOQ library as plugin to be used by at.fhv.tedapt
+
 ### at.fhv.tedapt.test ###
 JUnit Tests
