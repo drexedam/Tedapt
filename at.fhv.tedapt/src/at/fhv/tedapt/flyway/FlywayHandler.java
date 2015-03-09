@@ -80,7 +80,6 @@ public class FlywayHandler {
 		
 		try {
 			
-			//TODO redo saving
 			File d = new File(Platform.getLocation()+getChangelogFolder());
 			if(!d.exists()) {
 				d.mkdirs();
