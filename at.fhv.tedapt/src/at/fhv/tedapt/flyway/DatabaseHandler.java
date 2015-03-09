@@ -45,9 +45,10 @@ public class DatabaseHandler {
 	}
 	
 	/**
-	 * 
+	 * @deprecated No need to find driver manually anymore
 	 * @return The JDBC Driver class for the selected DBMS
 	 */
+	@java.lang.Deprecated
 	public static String getJDBCDriver() {
 		switch (Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.DB_MS)) {
 			case PreferenceConstants.DBMS_HSQL:
