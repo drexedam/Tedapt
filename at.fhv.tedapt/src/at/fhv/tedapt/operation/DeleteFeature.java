@@ -12,10 +12,14 @@ import org.eclipse.emf.edapt.history.util.HistoryUtils;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
+import org.jooq.DSLContext;
 
+import at.fhv.tedapt.flyway.DatabaseHandler;
 import at.fhv.tedapt.flyway.FlywayHandler;
+import at.fhv.tedapt.flyway.change.Change;
 import at.fhv.tedapt.flyway.change.DeleteColumn;
 import at.fhv.tedapt.flyway.change.DeleteTable;
+import at.fhv.tedapt.flyway.change.SQLChange;
 import at.fhv.tedapt.helper.CommonTasks;
 
 /**
@@ -38,6 +42,9 @@ public class DeleteFeature extends OperationImplementation {
 		
 		if (feature instanceof EAttribute) {
 			
+			DSLContext context = DatabaseHandler.getContext();
+			Change change;
+			
 			EAttribute atr = (EAttribute) feature;
 			
 			EClass contClass = CommonTasks.getMostAbstract(atr.getEContainingClass());
@@ -45,10 +52,18 @@ public class DeleteFeature extends OperationImplementation {
 
 			if(!CommonTasks.mapAsTable(atr.getUpperBound(), dataType.getName())) {
 				//Attribute is not mapped as table
-				FlywayHandler.addChange(new DeleteColumn(contClass.getName(), atr.getName()));
+				
+				change = new SQLChange(context.alterTable(contClass.getName()).drop(atr.getName()).getSQL());
+				
+//				FlywayHandler.addChange(new DeleteColumn(contClass.getName(), atr.getName()));
 			} else {
-				FlywayHandler.addChange(new DeleteTable(contClass.getName()+"_"+atr.getName()));
+				
+				change = new SQLChange(context.dropTable(contClass.getName()+"_"+atr.getName()).getSQL());
+				
+//				FlywayHandler.addChange(new DeleteTable(contClass.getName()+"_"+atr.getName()));
 			}
+			
+			FlywayHandler.addChange(change);
 			
 			FlywayHandler.saveChangelog(
 					HistoryUtils.getHistoryURI(

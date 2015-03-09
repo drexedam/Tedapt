@@ -13,13 +13,10 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 
-import at.fhv.tedapt.exception.PrimaryKeyCanBeNullException;
 import at.fhv.tedapt.flyway.DatabaseHandler;
 import at.fhv.tedapt.flyway.FlywayHandler;
 import at.fhv.tedapt.flyway.change.AddColumn;
-import at.fhv.tedapt.flyway.change.AddReferenceColumn;
 import at.fhv.tedapt.flyway.change.Change;
-import at.fhv.tedapt.flyway.change.CreateTable;
 import at.fhv.tedapt.flyway.change.SQLChange;
 import at.fhv.tedapt.flyway.entity.Column;
 import at.fhv.tedapt.helper.CommonTasks;
@@ -86,7 +83,7 @@ public class CreateReference extends OperationImplementation {
 		EClass refSuperClass = CommonTasks.getMostAbstract(type);
 		boolean notNull = (upperBound == 1 && lowerBound == 1);
 		Change change;
-		DSLContext context = DSL.using(DatabaseHandler.getDialect());
+		DSLContext context = DatabaseHandler.getContext();
 		if(containment) {
 			String addCol1 = context.alterTable(refSuperClass.getName())
 					.add("econtainer_class", SQLDataType.VARCHAR.length(255)).getSQL();

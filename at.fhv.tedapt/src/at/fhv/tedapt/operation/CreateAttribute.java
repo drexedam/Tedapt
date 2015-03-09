@@ -82,7 +82,7 @@ public class CreateAttribute extends OperationImplementation {
 		
 		
 		Change change;
-		DSLContext context = DSL.using(DatabaseHandler.getDialect());
+		DSLContext context = DatabaseHandler.getContext();
 		//Attributes upperBound == 1 are mapped as column otherwise as table
 		if(!CommonTasks.mapAsTable(upperBound, type.getName())) {
 //			Column c = new Column(name, DatabaseHandler.mapDataType(type),(upperBound == lowerBound));

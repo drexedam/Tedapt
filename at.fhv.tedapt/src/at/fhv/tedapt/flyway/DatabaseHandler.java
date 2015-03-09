@@ -1,8 +1,10 @@
 package at.fhv.tedapt.flyway;
 
 import org.eclipse.emf.ecore.EDataType;
+import org.jooq.DSLContext;
 import org.jooq.DataType;
 import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 
 import at.fhv.tedapt.Activator;
@@ -75,7 +77,7 @@ public class DatabaseHandler {
 		default:
 			return SQLDialect.MYSQL;
 		
-	}
+		}
 	}
 	
 	/**
@@ -155,6 +157,10 @@ public class DatabaseHandler {
 		default:
 			return SQLDataType.VARCHAR.length(255); //"varchar(255)";
 		}
+	}
+	
+	public static DSLContext getContext() {
+		return DSL.using(getDialect());
 	}
 }
 
