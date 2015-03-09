@@ -15,10 +15,8 @@ import org.jooq.impl.SQLDataType;
 
 import at.fhv.tedapt.flyway.DatabaseHandler;
 import at.fhv.tedapt.flyway.FlywayHandler;
-import at.fhv.tedapt.flyway.change.AddColumn;
 import at.fhv.tedapt.flyway.change.Change;
 import at.fhv.tedapt.flyway.change.SQLChange;
-import at.fhv.tedapt.flyway.entity.Column;
 import at.fhv.tedapt.helper.CommonTasks;
 
 /**
@@ -63,10 +61,11 @@ public class CreateReference extends OperationImplementation {
 	/** {@inheritDoc} */
 	@Override
 	public void execute(Metamodel metamodel, Model model) {
-		if(opposite != null) {
-			//For now because opposite seems to be mapped strange
-			return;
-		}
+		//Opposite mapped as normal?
+//		if(opposite != null) {
+//			//For now because opposite seems to be mapped strange
+//			return;
+//		}
 		//Metamodel changes
 //		EReference reference = 
 		MetamodelFactory.newEReference(eClass, name, type,
@@ -95,15 +94,15 @@ public class CreateReference extends OperationImplementation {
 					.add("e_container_feature_name", SQLDataType.VARCHAR.length(255)).getSQL();
 			
 			//create containment columns
-			FlywayHandler.addChange(new AddColumn(
-					refSuperClass.getName(), 
-					new Column("econtainer_class", "varchar(255)")));
-			FlywayHandler.addChange(new AddColumn(
-					refSuperClass.getName(), 
-					new Column("e_container", "varchar(255)")));
-			FlywayHandler.addChange(new AddColumn(
-					refSuperClass.getName(),
-					new Column("e_container_feature_name", "varchar(255)")));
+//			FlywayHandler.addChange(new AddColumn(
+//					refSuperClass.getName(), 
+//					new Column("econtainer_class", "varchar(255)")));
+//			FlywayHandler.addChange(new AddColumn(
+//					refSuperClass.getName(), 
+//					new Column("e_container", "varchar(255)")));
+//			FlywayHandler.addChange(new AddColumn(
+//					refSuperClass.getName(),
+//					new Column("e_container_feature_name", "varchar(255)")));
 	
 			String addRefCol, addRef;
 			
