@@ -11,6 +11,12 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import at.fhv.tedapt.flyway.FlywayHandler;
 
+/**
+ * 
+ * @author Damian Drexel
+ * @version 0.1
+ *
+ */
 public class MigrateHandler extends AbstractHandler {
 
 	@Override

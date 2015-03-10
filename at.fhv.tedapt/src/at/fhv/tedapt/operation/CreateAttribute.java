@@ -85,9 +85,6 @@ public class CreateAttribute extends OperationImplementation {
 		DSLContext context = DatabaseHandler.getContext();
 		//Attributes upperBound == 1 are mapped as column otherwise as table
 		if(!CommonTasks.mapAsTable(upperBound, type.getName())) {
-//			Column c = new Column(name, DatabaseHandler.mapDataType(type),(upperBound == lowerBound));
-//			c.setDefault(defaultValue);
-//			change = new AddColumn(superClass, c);
 
 			String query = context.alterTable(superClass)
 			.add(name, DatabaseHandler.mapDataTypeJOOQ(type).nullable(upperBound!=lowerBound)).getSQL();
@@ -106,29 +103,7 @@ public class CreateAttribute extends OperationImplementation {
 					.add(DSL.constraint(tableName+"_e_id_fk").foreignKey(tableName+"e_id").references(superClass, "e_id")).getSQL();
 					
 			change = new SQLChange(createTable, addPK, addFK);
-			
-//			CreateTable ct = new CreateTable(tableName);
-//			Column pk = new Column(tableName+"_e_id", "bigint(20)");
-//			try {
-//				ct.addPrimaryKey(pk);
-//			} catch (PrimaryKeyCanBeNullException e) {
-//				e.printStackTrace();
-//			}
-//			
-//			
-//			Column elt = new Column("elt", DatabaseHandler.mapDataType(type));
-//			ct.addColumn(elt);
-//			
-//			Column idx = new Column(tableName+"_idx", "int(11)");
-//			try {
-//				ct.addPrimaryKey(idx);
-//			} catch (PrimaryKeyCanBeNullException e) {
-//				e.printStackTrace();
-//			}
-//			
-//			
-//			ct.addForeignKey(idx, superClass, "e_id");
-//			change = ct;			
+					
 		}
 		
 		FlywayHandler.addChange(change);

@@ -1,6 +1,11 @@
 package at.fhv.tedapt.flyway.change;
 
-
+/**
+ * 
+ * @author Damian Drexel
+ * @version 0.1
+ *
+ */
 public class SQLChange implements Change {
 
 	private StringBuilder _query;
@@ -13,6 +18,8 @@ public class SQLChange implements Change {
 			if(!query.endsWith(";")) {
 				query += ";";
 			}
+			
+			//Flyway requires multiple queries to be in separate lines
 			query += System.lineSeparator();
 			
 			_query.append(query);

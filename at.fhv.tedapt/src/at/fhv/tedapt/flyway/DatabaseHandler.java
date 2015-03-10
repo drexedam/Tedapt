@@ -66,6 +66,10 @@ public class DatabaseHandler {
 		
 	}
 	
+	/**
+	 * 
+	 * @return The SQL dialect used by jOOQ
+	 */
 	public static SQLDialect getDialect() {
 		switch (Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.DB_MS)) {
 		case PreferenceConstants.DBMS_HSQL:
@@ -123,6 +127,11 @@ public class DatabaseHandler {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param dataType Some EMF datatype
+	 * @return SQL datatype representation used by jOOQ
+	 */
 	public static DataType<?> mapDataTypeJOOQ(EDataType dataType) {
 		String dType = dataType.getName();
 		switch (dType) {
@@ -160,6 +169,11 @@ public class DatabaseHandler {
 		}
 	}
 	
+	
+	/**
+	 * 
+	 * @return The DSL context depending on the right SQL dialect used by jOOQ
+	 */
 	public static DSLContext getContext() {
 		return DSL.using(getDialect());
 	}

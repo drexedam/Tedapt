@@ -61,20 +61,18 @@ public class CreateReference extends OperationImplementation {
 	/** {@inheritDoc} */
 	@Override
 	public void execute(Metamodel metamodel, Model model) {
-		//Opposite mapped as normal?
-//		if(opposite != null) {
-//			//For now because opposite seems to be mapped strange
-//			return;
-//		}
+
+
 		//Metamodel changes
 //		EReference reference = 
 		MetamodelFactory.newEReference(eClass, name, type,
 				lowerBound, upperBound, containment);
-		
-		//Not needed while opposite is not possible
-//		if (opposite != null) {
-//			metamodel.setEOpposite(opposite, reference);
-//		}
+
+		EReference reference = MetamodelFactory.newEReference(eClass, name, type,
+				lowerBound, upperBound, containment);
+		if (opposite != null) {
+			metamodel.setEOpposite(opposite, reference);
+		}
 		
 		//DB changes
 		
@@ -92,17 +90,6 @@ public class CreateReference extends OperationImplementation {
 			
 			String addCol3 = context.alterTable(refSuperClass.getName())
 					.add("e_container_feature_name", SQLDataType.VARCHAR.length(255)).getSQL();
-			
-			//create containment columns
-//			FlywayHandler.addChange(new AddColumn(
-//					refSuperClass.getName(), 
-//					new Column("econtainer_class", "varchar(255)")));
-//			FlywayHandler.addChange(new AddColumn(
-//					refSuperClass.getName(), 
-//					new Column("e_container", "varchar(255)")));
-//			FlywayHandler.addChange(new AddColumn(
-//					refSuperClass.getName(),
-//					new Column("e_container_feature_name", "varchar(255)")));
 	
 			String addRefCol, addRef;
 			
@@ -118,12 +105,7 @@ public class CreateReference extends OperationImplementation {
 								.references(superClass.getName(), 
 										"e_id"))
 						.getSQL();
-				
-//				FlywayHandler.addChange(new AddReferenceColumn(
-//						new Column(superClass.getName()+"_"+name, "bigint(28)",notNull),
-//						refSuperClass.getName(), 
-//						superClass.getName(), 
-//						"e_id"));
+
 			} else {
 				// additional columns in (super-)class which contains the other class
 				
@@ -137,11 +119,6 @@ public class CreateReference extends OperationImplementation {
 										"e_id"))
 						.getSQL();
 				
-//				FlywayHandler.addChange(new AddReferenceColumn(
-//						new Column(type.getName()+"_"+name, "bigint(28)",notNull),
-//						superClass.getName(), 
-//						refSuperClass.getName(), 
-//						"e_id"));
 			}
 			change = new SQLChange(addCol1, addCol2, addCol3, addRefCol, addRef);
 		} else {
@@ -171,22 +148,6 @@ public class CreateReference extends OperationImplementation {
 				
 				change = new SQLChange(createTable, addPKs, addFK1, addFK2);
 				
-//				CreateTable ct = new CreateTable(eClass.getName()+"_"+name);
-//				
-//				Column c1 = new Column(eClass.getName()+"_e_id", "bigint(20)", true);
-//				Column c2 = new Column(eClass.getName()+"_"+name+"_idx", "int(11)", true);
-//				ct.addColumn(c2);
-//				ct.addForeignKey(c1, superClass.getName(), "(e_id)");
-//				ct.addForeignKey(new Column(type.getName()+"_e_id", "bigint(20)", true), refSuperClass.getName(), "(e_id)");
-//				
-//				try {
-//					ct.addPrimaryKey(c1);
-//					ct.addPrimaryKey(c2);
-//				} catch (PrimaryKeyCanBeNullException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				
 
 			} else {
 				// add column in containing class
@@ -200,12 +161,7 @@ public class CreateReference extends OperationImplementation {
 								.getSQL();
 				
 				change = new SQLChange(addColumn, addFK);
-//				
-//				FlywayHandler.addChange(new AddReferenceColumn(
-//						new Column(type.getName()+"_"+name, "bigint(28)",notNull),
-//						superClass.getName(), 
-//						refSuperClass.getName(), 
-//						"e_id"));
+
 			}
 		}
 		

@@ -87,7 +87,7 @@ public class FlywayHandler {
 	}
 
 	/**
-	 * @return
+	 * @return A Flyway object configured with the current settings
 	 */
 	private static Flyway getFlywayObj() {
 		Flyway flyway = new Flyway();
@@ -100,7 +100,11 @@ public class FlywayHandler {
 	
 	
 	
-
+	/**
+	 * 
+	 * @param uri The histories URI
+	 * @param operationName The operations name which calls the method
+	 */
 	public static void saveChangelog(URI uri, String operationName) {
 
 		setProjectFolder(uri);
@@ -116,7 +120,7 @@ public class FlywayHandler {
 				d.mkdirs();
 			}
 			
-			int tempV = getNumOfMigrations(uri);
+			int tempV = getNumOfReleases(uri);
 			
 			if(tempV != _version) {
 				_version = tempV;
@@ -173,6 +177,10 @@ public class FlywayHandler {
 		
 	}
 	
+	/**
+	 * 
+	 * @return The path to the folder to be used for saving changelogs
+	 */
 	public static String getChangelogFolder() {
 		return getProjectFolder()+TEDAPT_POSTFIX+CHANGELOG_FOLDER;
 	}
@@ -222,7 +230,12 @@ public class FlywayHandler {
 		}
 	}
 	
-	private static int getNumOfMigrations(URI uri) {
+	/**
+	 * 
+	 * @param uri The history's URI 
+	 * @return Number of releases
+	 */
+	private static int getNumOfReleases(URI uri) {
 		File xmlFile = new File(Platform.getLocation()+uri.toPlatformString(false));
 
 		try {

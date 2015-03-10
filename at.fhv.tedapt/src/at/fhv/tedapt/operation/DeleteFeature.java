@@ -38,6 +38,15 @@ public class DeleteFeature extends OperationImplementation {
 	protected void execute(Metamodel metamodel, Model model)
 			throws MigrationException {
 		
+		// metamodel adaptation
+		metamodel.delete(feature);
+		if (feature instanceof EReference) {
+			EReference reference = (EReference) feature;
+			if (reference.getEOpposite() != null) {
+				metamodel.delete(reference.getEOpposite());
+			}
+		}	
+		
 		Change change = null, change2 = null;
 		DSLContext context = DatabaseHandler.getContext();
 		if (feature instanceof EAttribute) {
@@ -51,13 +60,9 @@ public class DeleteFeature extends OperationImplementation {
 				//Attribute is not mapped as table
 				
 				change = new SQLChange(context.alterTable(contClass.getName()).drop(atr.getName()).getSQL());
-				
-//				FlywayHandler.addChange(new DeleteColumn(contClass.getName(), atr.getName()));
 			} else {
 				
 				change = new SQLChange(context.dropTable(contClass.getName()+"_"+atr.getName()).getSQL());
-				
-//				FlywayHandler.addChange(new DeleteTable(contClass.getName()+"_"+atr.getName()));
 			}
 			
 			
@@ -87,20 +92,13 @@ public class DeleteFeature extends OperationImplementation {
 		}
 		
 		
-		// metamodel adaptation
-		metamodel.delete(feature);
-		if (feature instanceof EReference) {
-			EReference reference = (EReference) feature;
-			if (reference.getEOpposite() != null) {
-				metamodel.delete(reference.getEOpposite());
-			}
-		}	
+		
 
 	}
 
 	/**
-	 * @param context
-	 * @return
+	 * @param context DSL context used by jOOQ
+	 * @return A change to be added to the changelog
 	 */
 	private Change deleteReference(DSLContext context, EReference ref) {
 		Change change;
