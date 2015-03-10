@@ -1,6 +1,8 @@
 package at.fhv.tedapt.preferences;
 
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Composite;
@@ -42,6 +44,8 @@ public class TedaptPreferences
 	public void createFieldEditors() {
 		StringFieldEditor uName, uPW, dbAdr, dbName;
 		RadioGroupFieldEditor dbms;
+		BooleanFieldEditor outOfOrder;
+		IntegerFieldEditor baseVersion, maxVersion;
 		
 		uName = new StringFieldEditor(PreferenceConstants.P_UNAME, "Database &username", getFieldEditorParent());
 		uName.setEmptyStringAllowed(false);
@@ -72,12 +76,23 @@ public class TedaptPreferences
 					//{"SQL Server", PreferenceConstants.DBMS_SQLSERV}
 					},
 				getFieldEditorParent());
+		
+		outOfOrder = new BooleanFieldEditor(PreferenceConstants.FLYWAY_OUT_OF_ORDER, "&Out of order migrations", getFieldEditorParent());
 				
+		baseVersion = new IntegerFieldEditor(PreferenceConstants.FLYWAY_BASE_VERSION, "&Base version for migration", getFieldEditorParent());
+
+		maxVersion = new IntegerFieldEditor(PreferenceConstants.FLYWAY_TARGET_VERSION, "&Target database version", getFieldEditorParent());
+		
 		addField(uName);
 		addField(uPW);
 		addField(dbAdr);
 		addField(dbName);
 		addField(dbms);
+		
+		
+		addField(outOfOrder);
+		addField(baseVersion);
+		addField(maxVersion);
 		
 	}
 
@@ -91,5 +106,6 @@ public class TedaptPreferences
 	public boolean performOk() {
 		return super.performOk();
 	}
+	
 	
 }

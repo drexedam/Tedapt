@@ -22,6 +22,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_PW, "");
 		store.setDefault(PreferenceConstants.DB_ADDRESS, "localhost");
 		store.setDefault(PreferenceConstants.DB_NAME, "test");
+		
+		store.setDefault(PreferenceConstants.FLYWAY_BASE_VERSION, 0);
+		store.setDefault(PreferenceConstants.FLYWAY_TARGET_VERSION, 0);
+		store.setDefault(PreferenceConstants.FLYWAY_OUT_OF_ORDER, false);
 	}
 
 }

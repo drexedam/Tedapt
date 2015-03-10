@@ -9,6 +9,12 @@
             id="at.fhv.tedapt.Migrate"
             name="Migrate">
       </command>
+      <command
+      	categoryId="at.fhv.tedapt"
+      	defaultHandler="at.fhv.tedapt.ui.RepairHandler"
+      	id="at.fhv.tedapt.Repair"
+      	name="Repair Database">
+      	</command>
       <category
             id="at.fhv.tedapt"
             name="Tedapt">
@@ -47,6 +53,17 @@
                   </reference>
                </visibleWhen>
             </command>
+            <command
+            	commandId="at.fhv.tedapt.Repair"
+            	label="Repair Databse"
+            	style="push">
+            	<visibleWhen
+            		checkEnabled="false">
+            		<reference
+                        definitionId="at.fhv.tedapt.migration">
+                  	</reference>
+               	</visibleWhen>
+            	</command>
          </menu>
       </menuContribution>
    </extension>

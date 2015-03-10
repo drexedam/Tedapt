@@ -56,18 +56,49 @@ public class FlywayHandler {
 	 * Updates the database to the newest version based on all changelogs safed by.
 	 */
 	public static void migrateChanges(String path) {
-		Flyway flyway = new Flyway();
-		flyway.setBaselineOnMigrate(true);
-		flyway.setDataSource(DatabaseHandler.getJDBCURL(),
-				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_UNAME), 
-				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PW));
-
+		Flyway flyway = getFlywayObj();
+		
+		//Are out of order migrations allowed? (e.g. V1 and V3 are applied but V2 is found)
+		flyway.setOutOfOrder(Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.FLYWAY_OUT_OF_ORDER));
+		
+		//Experimental
+		int baseLineVersion = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.FLYWAY_BASE_VERSION);
+		if(baseLineVersion > 0) {
+			flyway.setBaselineVersion(""+baseLineVersion);
+		}
+		
+		//Experimental
+		int targetVersion = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.FLYWAY_TARGET_VERSION);
+		if(targetVersion > 0) {
+			flyway.setTarget(""+targetVersion);
+		}
+		
+		
+		
 		flyway.setLocations("filesystem:"+path);
 		flyway.migrate();
 	
 		saveVersionInfo();
 
 	}
+	
+	public static void repairDatabase() {
+		getFlywayObj().repair();
+	}
+
+	/**
+	 * @return
+	 */
+	private static Flyway getFlywayObj() {
+		Flyway flyway = new Flyway();
+		flyway.setBaselineOnMigrate(true);
+		flyway.setDataSource(DatabaseHandler.getJDBCURL(),
+				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_UNAME), 
+				Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PW));
+		return flyway;
+	}
+	
+	
 	
 
 	public static void saveChangelog(URI uri, String operationName) {

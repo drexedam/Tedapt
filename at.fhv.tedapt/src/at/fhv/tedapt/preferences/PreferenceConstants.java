@@ -18,4 +18,8 @@ public class PreferenceConstants {
 	public static final String DBMS_SQLSERV = "SQL_SERVER";
 	public static final String DBMS_MYSQL = "MYSQL";
 	public static final String DBMS_PSQL = "POSTGRE_SQL";
+	
+	public static final String FLYWAY_OUT_OF_ORDER = "FLYWAY_OOO";
+	public static final String FLYWAY_BASE_VERSION = "FLYWAY_BV";
+	public static final String FLYWAY_TARGET_VERSION = "FLYWAY_TV";
 }
