@@ -37,6 +37,7 @@ public class CopyColumn implements Change {
 		sb.append(_goal);
 		sb.append("=");
 		sb.append(_origin);
+		sb.append(";");
 		return sb.toString();
 	}
 
