@@ -81,6 +81,9 @@
          <operation
                class="at.fhv.tedapt.operation.DeleteFeature">
          </operation>
+         <operation
+               class="at.fhv.tedapt.operation.CopyFeature">
+         </operation>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
