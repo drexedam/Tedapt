@@ -18,7 +18,6 @@ import org.jooq.SQLDialect;
 import at.fhv.tedapt.exception.PrimaryKeyCanBeNullException;
 import at.fhv.tedapt.flyway.DatabaseHandler;
 import at.fhv.tedapt.flyway.FlywayHandler;
-import at.fhv.tedapt.flyway.change.ChangeHandler;
 import at.fhv.tedapt.flyway.change.CreateIndex;
 import at.fhv.tedapt.flyway.change.CreateTable;
 import at.fhv.tedapt.flyway.entity.Column;
@@ -68,7 +67,7 @@ public class CreateClass extends OperationImplementation {
 				return;
 			}
 			
-			CreateTable ct = ChangeHandler.getCreateTable(name);
+			CreateTable ct = CreateTable.getInstance(name);
 			
 			try {
 				ct.addPrimaryKey(new Column("e_id", "bigint(20)", true, true));

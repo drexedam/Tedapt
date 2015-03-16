@@ -1,10 +1,20 @@
 package at.fhv.tedapt.flyway.change;
 
 import at.fhv.tedapt.exception.PrimaryKeyCanBeNullException;
+import at.fhv.tedapt.flyway.DatabaseHandler;
+import at.fhv.tedapt.flyway.change.mysql.CreateTableMySQL;
 import at.fhv.tedapt.flyway.entity.Column;
 
 public interface CreateTable extends Change {
 
+	public static CreateTable getInstance(String tableName) {
+		switch (DatabaseHandler.getDialect()) {
+		case MYSQL:
+		default:
+			return new CreateTableMySQL(tableName);
+		}
+	}
+	
 	/**
 	 * Adds a simple column to the table.
 	 * 
