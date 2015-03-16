@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import at.fhv.tedapt.exception.PrimaryKeyCanBeNullException;
 import at.fhv.tedapt.flyway.change.CreateTable;
+import at.fhv.tedapt.flyway.change.mysql.CreateTableMySQL;
 import at.fhv.tedapt.flyway.entity.Column;
 
 public class CreateTableTest {
@@ -14,13 +15,13 @@ public class CreateTableTest {
 
 	@Test(expected=PrimaryKeyCanBeNullException.class)
 	public void testAddPrimaryKey() throws PrimaryKeyCanBeNullException {
-		CreateTable ct = new CreateTable("hasToFail");
+		CreateTable ct = new CreateTableMySQL("hasToFail");
 		ct.addPrimaryKey(new Column("wrongPK", "doesNotMatter"));
 	}
 	
 	@Test
 	public void testGetSQL() {
-		CreateTable ct = new CreateTable("testTable");
+		CreateTableMySQL ct = new CreateTableMySQL("testTable");
 		Column c1 = new Column("column1", "varchar(255)");
 		ct.addColumn(c1);
 		Column c2 = new Column("pkColumn", "int(11)",true, true);

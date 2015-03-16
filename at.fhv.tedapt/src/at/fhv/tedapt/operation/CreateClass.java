@@ -13,15 +13,15 @@ import org.eclipse.emf.edapt.history.util.HistoryUtils;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
+import org.jooq.SQLDialect;
 
 import at.fhv.tedapt.exception.PrimaryKeyCanBeNullException;
 import at.fhv.tedapt.flyway.DatabaseHandler;
 import at.fhv.tedapt.flyway.FlywayHandler;
+import at.fhv.tedapt.flyway.change.ChangeHandler;
 import at.fhv.tedapt.flyway.change.CreateIndex;
 import at.fhv.tedapt.flyway.change.CreateTable;
 import at.fhv.tedapt.flyway.entity.Column;
-
-import org.jooq.SQLDialect;
 
 
 /**
@@ -68,7 +68,7 @@ public class CreateClass extends OperationImplementation {
 				return;
 			}
 			
-			CreateTable ct = new CreateTable(name);
+			CreateTable ct = ChangeHandler.getCreateTable(name);
 			
 			try {
 				ct.addPrimaryKey(new Column("e_id", "bigint(20)", true, true));
