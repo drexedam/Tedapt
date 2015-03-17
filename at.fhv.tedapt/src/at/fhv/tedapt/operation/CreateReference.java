@@ -64,10 +64,6 @@ public class CreateReference extends OperationImplementation {
 
 
 		//Metamodel changes
-//		EReference reference = 
-		MetamodelFactory.newEReference(eClass, name, type,
-				lowerBound, upperBound, containment);
-
 		EReference reference = MetamodelFactory.newEReference(eClass, name, type,
 				lowerBound, upperBound, containment);
 		if (opposite != null) {
