@@ -73,7 +73,7 @@ public class FlywayHandler {
 			flyway.setTarget(""+targetVersion);
 		}
 		
-		
+		flyway.baseline();
 		
 		flyway.setLocations("filesystem:"+path);
 		flyway.migrate();
