@@ -1,5 +1,11 @@
 package at.fhv.tedapt.operation;
 
+import static at.fhv.tedapt.helper.NamingConstants.FK_SUFFIX;
+import static at.fhv.tedapt.helper.NamingConstants.ID;
+import static at.fhv.tedapt.helper.NamingConstants.IDX_SUFFIX;
+import static at.fhv.tedapt.helper.NamingConstants.ID_SUFFIX;
+import static at.fhv.tedapt.helper.NamingConstants.PK_SUFFIX;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
@@ -159,7 +165,7 @@ public class CopyFeature extends OperationImplementation {
 						.add(DSL.constraint(superClass.getName()+"_"+name+"_fk")
 								.foreignKey(superClass.getName()+"_"+name)
 								.references(superClass.getName(), 
-										"e_id"))
+										ID))
 						.getSQL();
 
 			} else {
@@ -172,7 +178,7 @@ public class CopyFeature extends OperationImplementation {
 						.add(DSL.constraint(type.getName()+"_"+name+"_fk")
 								.foreignKey(type.getName()+"_"+name)
 								.references(refSuperClass.getName(), 
-										"e_id"))
+										ID))
 						.getSQL();
 				
 			}
@@ -182,24 +188,24 @@ public class CopyFeature extends OperationImplementation {
 				// create table for reference
 				
 				String createTable = context.createTable(eClass.getName()+"_"+name)
-						.column(eClass.getName()+"_e_id", SQLDataType.BIGINT.nullable(false))
-						.column(eClass.getName()+"_"+name+"_idx", SQLDataType.INTEGER.nullable(false))
-						.column(type.getName()+"_e_id", SQLDataType.BIGINT.nullable(false)).getSQL();
+						.column(eClass.getName()+ID_SUFFIX, SQLDataType.BIGINT.nullable(false))
+						.column(eClass.getName()+"_"+name+IDX_SUFFIX, SQLDataType.INTEGER.nullable(false))
+						.column(type.getName()+ID_SUFFIX, SQLDataType.BIGINT.nullable(false)).getSQL();
 				
 				String addPKs = context.alterTable(eClass.getName()+"_"+name)
-						.add(DSL.constraint(eClass.getName()+"_"+name+"_pk")
-								.primaryKey(eClass.getName()+"_e_id",eClass.getName()+"_"+name+"_idx"))
+						.add(DSL.constraint(eClass.getName()+"_"+name+PK_SUFFIX)
+								.primaryKey(eClass.getName()+"_e_id",eClass.getName()+"_"+name+IDX_SUFFIX))
 						.getSQL();
 				
 				String addFK1 = context.alterTable(eClass.getName()+"_"+name)
-						.add(DSL.constraint(eClass.getName()+"_"+name+"_e_id_fk")
-								.foreignKey(eClass.getName()+"_e_id").references(superClass.getName(), "e_id"))
+						.add(DSL.constraint(eClass.getName()+"_"+name+ID_SUFFIX+FK_SUFFIX)
+								.foreignKey(eClass.getName()+ID_SUFFIX).references(superClass.getName(), ID))
 								.getSQL();
 				
 				String addFK2 = context.alterTable(eClass.getName()+"_"+name)
-						.add(DSL.constraint(eClass.getName()+"_"+name+"_type_e_id_fk")
-								.foreignKey(type.getName()+"_e_id")
-								.references(refSuperClass.getName(), "e_id"))
+						.add(DSL.constraint(eClass.getName()+"_"+name+"_type"+ID_SUFFIX+FK_SUFFIX)
+								.foreignKey(type.getName()+ID_SUFFIX)
+								.references(refSuperClass.getName(), ID))
 								.getSQL();
 				
 				change = new SQLChange(createTable, addPKs, addFK1, addFK2);
@@ -212,8 +218,8 @@ public class CopyFeature extends OperationImplementation {
 						.getSQL();
 				
 				String addFK = context.alterTable(superClass.getName())
-						.add(DSL.constraint(superClass.getName()+type.getName()+"_"+name+"_fk")
-								.foreignKey(type.getName()+"_"+name).references(refSuperClass.getName(), "e_id"))
+						.add(DSL.constraint(superClass.getName()+type.getName()+"_"+name+FK_SUFFIX)
+								.foreignKey(type.getName()+"_"+name).references(refSuperClass.getName(), ID))
 								.getSQL();
 				
 				change = new SQLChange(addColumn, addFK);
@@ -251,32 +257,17 @@ public class CopyFeature extends OperationImplementation {
 			
 		} else {
 			if(reference.getUpperBound() != 1) {
-				// create table for reference
-				
-//				String createTable = context.createTable(eClass.getName()+"_"+name)
-//						.column(eClass.getName()+"_e_id", SQLDataType.BIGINT.nullable(false))
-//						.column(eClass.getName()+"_"+name+"_idx", SQLDataType.INTEGER.nullable(false))
-//						.column(type.getName()+"_e_id", SQLDataType.BIGINT.nullable(false)).getSQL();
 				return new CopyTable(superClass.getName()+"_"+name, superClass.getName()+"_"+reference.getName());
-				
-				
 
 			} else {
-				// add column in containing class
-//				String addColumn = context.alterTable(superClass.getName())
-//						.add(type.getName()+"_"+name, SQLDataType.BIGINT.nullable(!notNull))
-//						.getSQL();
-//				
-//				String addFK = context.alterTable(superClass.getName())
-//						.add(DSL.constraint(superClass.getName()+type.getName()+"_"+name+"_fk")
-//								.foreignKey(type.getName()+"_"+name).references(refSuperClass.getName(), "e_id"))
-//								.getSQL();
-//				
-//				change = new SQLChange(addColumn, addFK);
+				
+				return new CopyColumn(
+						superClass.getName(), 
+						reference.getEReferenceType().getName()+"_"+reference.getName(), 
+						reference.getEReferenceType().getName()+"_"+name);
 
 			}
 		}
-		return null;
 	}
 	
 

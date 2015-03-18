@@ -1,5 +1,14 @@
 package at.fhv.tedapt.operation;
 
+import static at.fhv.tedapt.helper.NamingConstants.E_CON;
+import static at.fhv.tedapt.helper.NamingConstants.E_CON_CLASS;
+import static at.fhv.tedapt.helper.NamingConstants.E_CON_FEAT;
+import static at.fhv.tedapt.helper.NamingConstants.FK_SUFFIX;
+import static at.fhv.tedapt.helper.NamingConstants.ID;
+import static at.fhv.tedapt.helper.NamingConstants.IDX_SUFFIX;
+import static at.fhv.tedapt.helper.NamingConstants.ID_SUFFIX;
+import static at.fhv.tedapt.helper.NamingConstants.PK_SUFFIX;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edapt.common.MetamodelFactory;
@@ -79,13 +88,13 @@ public class CreateReference extends OperationImplementation {
 		DSLContext context = DatabaseHandler.getContext();
 		if(containment) {
 			String addCol1 = context.alterTable(refSuperClass.getName())
-					.add("econtainer_class", SQLDataType.VARCHAR.length(255)).getSQL();
+					.add(E_CON_CLASS, SQLDataType.VARCHAR.length(255)).getSQL();
 			
 			String addCol2 = context.alterTable(refSuperClass.getName())
-					.add("e_container", SQLDataType.VARCHAR.length(255)).getSQL();
+					.add(E_CON, SQLDataType.VARCHAR.length(255)).getSQL();
 			
 			String addCol3 = context.alterTable(refSuperClass.getName())
-					.add("e_container_feature_name", SQLDataType.VARCHAR.length(255)).getSQL();
+					.add(E_CON_FEAT, SQLDataType.VARCHAR.length(255)).getSQL();
 	
 			String addRefCol, addRef;
 			
@@ -96,10 +105,10 @@ public class CreateReference extends OperationImplementation {
 						.add(superClass.getName()+"_"+name, SQLDataType.BIGINT.nullable(!notNull)).getSQL();
 				
 				addRef = context.alterTable(refSuperClass.getName())
-						.add(DSL.constraint(superClass.getName()+"_"+name+"_fk")
+						.add(DSL.constraint(superClass.getName()+"_"+name+FK_SUFFIX)
 								.foreignKey(superClass.getName()+"_"+name)
 								.references(superClass.getName(), 
-										"e_id"))
+										ID))
 						.getSQL();
 
 			} else {
@@ -109,10 +118,10 @@ public class CreateReference extends OperationImplementation {
 						.add(type.getName()+"_"+name, SQLDataType.BIGINT.nullable(!notNull)).getSQL();
 				
 				addRef = context.alterTable(superClass.getName())
-						.add(DSL.constraint(type.getName()+"_"+name+"_fk")
+						.add(DSL.constraint(type.getName()+"_"+name+FK_SUFFIX)
 								.foreignKey(type.getName()+"_"+name)
 								.references(refSuperClass.getName(), 
-										"e_id"))
+										ID))
 						.getSQL();
 				
 			}
@@ -122,24 +131,24 @@ public class CreateReference extends OperationImplementation {
 				// create table for reference
 				
 				String createTable = context.createTable(eClass.getName()+"_"+name)
-						.column(eClass.getName()+"_e_id", SQLDataType.BIGINT.nullable(false))
-						.column(eClass.getName()+"_"+name+"_idx", SQLDataType.INTEGER.nullable(false))
-						.column(type.getName()+"_e_id", SQLDataType.BIGINT.nullable(false)).getSQL();
+						.column(eClass.getName()+ID_SUFFIX, SQLDataType.BIGINT.nullable(false))
+						.column(eClass.getName()+"_"+name+IDX_SUFFIX, SQLDataType.INTEGER.nullable(false))
+						.column(type.getName()+ID_SUFFIX, SQLDataType.BIGINT.nullable(false)).getSQL();
 				
 				String addPKs = context.alterTable(eClass.getName()+"_"+name)
-						.add(DSL.constraint(eClass.getName()+"_"+name+"_pk")
-								.primaryKey(eClass.getName()+"_e_id",eClass.getName()+"_"+name+"_idx"))
+						.add(DSL.constraint(eClass.getName()+"_"+name+PK_SUFFIX)
+								.primaryKey(eClass.getName()+ID_SUFFIX,eClass.getName()+"_"+name+IDX_SUFFIX))
 						.getSQL();
 				
 				String addFK1 = context.alterTable(eClass.getName()+"_"+name)
-						.add(DSL.constraint(eClass.getName()+"_"+name+"_e_id_fk")
-								.foreignKey(eClass.getName()+"_e_id").references(superClass.getName(), "e_id"))
+						.add(DSL.constraint(eClass.getName()+"_"+name+ID_SUFFIX+FK_SUFFIX)
+								.foreignKey(eClass.getName()+ID_SUFFIX).references(superClass.getName(), ID))
 								.getSQL();
 				
 				String addFK2 = context.alterTable(eClass.getName()+"_"+name)
-						.add(DSL.constraint(eClass.getName()+"_"+name+"_type_e_id_fk")
-								.foreignKey(type.getName()+"_e_id")
-								.references(refSuperClass.getName(), "e_id"))
+						.add(DSL.constraint(eClass.getName()+"_"+name+"_type"+ID_SUFFIX+FK_SUFFIX)
+								.foreignKey(type.getName()+ID_SUFFIX)
+								.references(refSuperClass.getName(), ID))
 								.getSQL();
 				
 				change = new SQLChange(createTable, addPKs, addFK1, addFK2);
@@ -152,8 +161,8 @@ public class CreateReference extends OperationImplementation {
 						.getSQL();
 				
 				String addFK = context.alterTable(superClass.getName())
-						.add(DSL.constraint(superClass.getName()+type.getName()+"_"+name+"_fk")
-								.foreignKey(type.getName()+"_"+name).references(refSuperClass.getName(), "e_id"))
+						.add(DSL.constraint(superClass.getName()+type.getName()+"_"+name+FK_SUFFIX)
+								.foreignKey(type.getName()+"_"+name).references(refSuperClass.getName(), ID))
 								.getSQL();
 				
 				change = new SQLChange(addColumn, addFK);

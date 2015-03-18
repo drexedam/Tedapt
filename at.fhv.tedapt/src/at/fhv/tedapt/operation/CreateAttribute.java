@@ -1,5 +1,11 @@
 package at.fhv.tedapt.operation;
 
+import static at.fhv.tedapt.helper.NamingConstants.FK_SUFFIX;
+import static at.fhv.tedapt.helper.NamingConstants.IDX_SUFFIX;
+import static at.fhv.tedapt.helper.NamingConstants.ID_SUFFIX;
+import static at.fhv.tedapt.helper.NamingConstants.ID;
+import static at.fhv.tedapt.helper.NamingConstants.PK_SUFFIX;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.edapt.common.MetamodelFactory;
@@ -93,14 +99,14 @@ public class CreateAttribute extends OperationImplementation {
 			String tableName = eClass.getName()+"_"+name;
 			
 			String createTable = context.createTable(tableName)
-					.column(tableName+"_e_id", SQLDataType.BIGINT)
+					.column(tableName+ID_SUFFIX, SQLDataType.BIGINT)
 					.column("elt", DatabaseHandler.mapDataTypeJOOQ(type))
-					.column(tableName+"_idx", SQLDataType.INTEGER).getSQL();
+					.column(tableName+IDX_SUFFIX, SQLDataType.INTEGER).getSQL();
 			
 			String addPK = context.alterTable(tableName)
-					.add(DSL.constraint(tableName+"_e_id_pk").primaryKey(tableName+"_e_id", tableName+"_idx")).getSQL();
+					.add(DSL.constraint(tableName+ID_SUFFIX+PK_SUFFIX).primaryKey(tableName+ID_SUFFIX, tableName+IDX_SUFFIX)).getSQL();
 			String addFK = context.alterTable(tableName)
-					.add(DSL.constraint(tableName+"_e_id_fk").foreignKey(tableName+"e_id").references(superClass, "e_id")).getSQL();
+					.add(DSL.constraint(tableName+ID_SUFFIX+FK_SUFFIX).foreignKey(tableName+ID_SUFFIX).references(superClass, ID)).getSQL();
 					
 			change = new SQLChange(createTable, addPK, addFK);
 					

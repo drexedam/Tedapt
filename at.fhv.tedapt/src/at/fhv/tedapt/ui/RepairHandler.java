@@ -20,6 +20,7 @@ public class RepairHandler extends AbstractHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent arg0) throws ExecutionException {
+		//TODO configure Flyway for loading migrations
 		FlywayHandler.repairDatabase();
 		return null;
 	}

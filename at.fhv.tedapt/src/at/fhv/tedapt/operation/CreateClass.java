@@ -1,5 +1,9 @@
 package at.fhv.tedapt.operation;
 
+import static at.fhv.tedapt.helper.NamingConstants.DTYPE;
+import static at.fhv.tedapt.helper.NamingConstants.E_VERS;
+import static at.fhv.tedapt.helper.NamingConstants.ID;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,19 +74,19 @@ public class CreateClass extends OperationImplementation {
 			CreateTable ct = CreateTable.getInstance(name);
 			
 			try {
-				ct.addPrimaryKey(new Column("e_id", "bigint(20)", true, true));
+				ct.addPrimaryKey(new Column(ID, "bigint(20)", true, true));
 			} catch (PrimaryKeyCanBeNullException e) {
 				e.printStackTrace();
 			}
 			
-			Column dType = new Column("dtype", "varchar(255)", true);
+			Column dType = new Column(DTYPE, "varchar(255)", true);
 			ct.addColumn(dType);
 			
-			ct.addColumn(new Column("e_version", "int(11)", true));
+			ct.addColumn(new Column(E_VERS, "int(11)", true));
 			
 			FlywayHandler.addChange(ct);
 			
-			FlywayHandler.addChange(new CreateIndex(name+"dtype", name, dType));
+			FlywayHandler.addChange(new CreateIndex(name+DTYPE, name, dType));
 	
 			
 			FlywayHandler.saveChangelog(

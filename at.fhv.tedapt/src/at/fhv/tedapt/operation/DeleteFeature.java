@@ -1,5 +1,10 @@
 package at.fhv.tedapt.operation;
 
+import static at.fhv.tedapt.helper.NamingConstants.E_CON;
+import static at.fhv.tedapt.helper.NamingConstants.E_CON_CLASS;
+import static at.fhv.tedapt.helper.NamingConstants.E_CON_FEAT;
+import static at.fhv.tedapt.helper.NamingConstants.FK_SUFFIX;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -19,7 +24,6 @@ import at.fhv.tedapt.flyway.FlywayHandler;
 import at.fhv.tedapt.flyway.change.Change;
 import at.fhv.tedapt.flyway.change.SQLChange;
 import at.fhv.tedapt.helper.CommonTasks;
-
 /**
  * 
  * @author Damian Drexel
@@ -108,32 +112,25 @@ public class DeleteFeature extends OperationImplementation {
 		EClass refSuperClass  = CommonTasks.getMostAbstract(type);
 		
 		if(ref.isContainment()) {
-			String dropEconClass = context.alterTable(refSuperClass.getName()).dropColumn("econtainer_class").getSQL();
-			String dropEcon = context.alterTable(refSuperClass.getName()).dropColumn("e_container").getSQL();
-			String dropEconFeatName = context.alterTable(refSuperClass.getName()).dropColumn("e_container_feature_name").getSQL();
+			String dropEconClass = context.alterTable(refSuperClass.getName()).dropColumn(E_CON_CLASS).getSQL();
+			String dropEcon = context.alterTable(refSuperClass.getName()).dropColumn(E_CON).getSQL();
+			String dropEconFeatName = context.alterTable(refSuperClass.getName()).dropColumn(E_CON_FEAT).getSQL();
 			
 			String dropFK, dropCol;
 			if(ref.getUpperBound() != 1) {
-				dropFK = context.alterTable(refSuperClass.getName()).dropConstraint(superClass.getName()+"_"+ref.getName()+"_fk").getSQL();
+				dropFK = context.alterTable(refSuperClass.getName()).dropConstraint(superClass.getName()+"_"+ref.getName()+FK_SUFFIX).getSQL();
 				dropCol = context.alterTable(refSuperClass.getName()).dropColumn(superClass.getName()+"_"+ref.getName()).getSQL();
 			} else {
-				dropFK = context.alterTable(superClass.getName()).dropConstraint(type.getName()+"_"+ref.getName()+"_fk").getSQL();
+				dropFK = context.alterTable(superClass.getName()).dropConstraint(type.getName()+"_"+ref.getName()+FK_SUFFIX).getSQL();
 				dropCol = context.alterTable(superClass.getName()).dropColumn(type.getName()+"_"+ref.getName()).getSQL();
 			}
 			
 			change = new SQLChange(dropEconClass, dropEcon, dropEconFeatName, dropFK, dropCol);
 			
 		} else {
-			if(ref.getUpperBound() != 1) {
-//					String dropFK2, dropFK1, dropPKs, 
+			if(ref.getUpperBound() != 1) { 
 				String dropTable;
 				EClass eClass = ref.getEContainingClass();
-//					dropFK2 = context.alterTable(eClass.getName()+"_"+ref.getName())
-//							.dropConstraint(eClass.getName()+"_"+ref.getName()+"_type_e_id_fk").getSQL();
-//					dropFK1 = context.alterTable(eClass.getName()+"_"+ref.getName())
-//							.dropConstraint(eClass.getName()+"_"+ref.getName()+"_e_id_fk").getSQL();
-//					dropPKs = context.alterTable(eClass.getName()+"_"+ref.getName())
-//							.dropConstraint(eClass.getName()+"_"+ref.getName()+"_pk").getSQL();
 				
 				dropTable = context.dropTable(eClass.getName()+"_"+ref.getName()).getSQL();
 				
@@ -141,7 +138,6 @@ public class DeleteFeature extends OperationImplementation {
 				change = new SQLChange(dropTable);
 			} else {
 				String dropColumn;
-				
 				
 				dropColumn = context.alterTable(superClass.getName()).dropColumn(type.getName()+"_"+ref.getName()).getSQL();
 				
