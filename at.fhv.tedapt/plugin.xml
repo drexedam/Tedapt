@@ -11,6 +11,12 @@
       </command>
       <command
       	categoryId="at.fhv.tedapt"
+      	defaultHandler="at.fhv.tedapt.ui.MigrateCustomHandler"
+      	id="at.fhv.tedapt.CustomMigrate"
+      	name="Custom Migrate">
+      	</command>
+      <command
+      	categoryId="at.fhv.tedapt"
       	defaultHandler="at.fhv.tedapt.ui.RepairHandler"
       	id="at.fhv.tedapt.Repair"
       	name="Repair Database">
@@ -53,6 +59,17 @@
                   </reference>
                </visibleWhen>
             </command>
+            <command
+            	commandId="at.fhv.tedapt.CustomMigrate"
+            	label="Migrate Database ..."
+            	style="push">
+            	<visibleWhen
+            		checkEnabled="false">
+            		<reference
+            			definitionId="at.fhv.tedapt.migration">
+        			</reference>
+        		</visibleWhen>
+        	</command>
             <command
             	commandId="at.fhv.tedapt.Repair"
             	label="Repair Databse"

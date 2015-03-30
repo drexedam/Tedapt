@@ -20,6 +20,7 @@ import org.xml.sax.SAXException;
 
 import at.fhv.tedapt.Activator;
 import at.fhv.tedapt.flyway.change.Change;
+import at.fhv.tedapt.helper.MigrationData;
 import at.fhv.tedapt.preferences.PreferenceConstants;
 
 /**
@@ -73,13 +74,41 @@ public class FlywayHandler {
 			flyway.setTarget(""+targetVersion);
 		}
 		
-		flyway.baseline();
+		//flyway.baseline();
 		
 		flyway.setLocations("filesystem:"+path);
 		flyway.migrate();
 	
 		saveVersionInfo();
 
+	}
+	
+	public static void migrateChanges(String path, MigrationData data) {
+		Flyway flyway = new Flyway();
+		flyway.setBaselineOnMigrate(true);
+		flyway.setDataSource(DatabaseHandler.getJDBCURL(data.getDBAdr(), data.getDBName()),
+				data.getUName(), 
+				data.getPW());
+		
+		
+		flyway.setOutOfOrder(data.outOfOrder());
+		
+		//Experimental
+		int baseLineVersion = data.getBaseVersion();
+		if(baseLineVersion > 0) {
+			flyway.setBaselineVersion(""+baseLineVersion);
+		}
+		
+		//Experimental
+		int targetVersion = data.getMaxVersion();
+		if(targetVersion > 0) {
+			flyway.setTarget(""+targetVersion);
+		}
+		
+		flyway.setLocations("filesystem:"+path);
+		flyway.migrate();
+		
+		saveVersionInfo();
 	}
 	
 	public static void repairDatabase() {

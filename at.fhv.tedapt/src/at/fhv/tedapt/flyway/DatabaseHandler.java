@@ -44,6 +44,24 @@ public class DatabaseHandler {
 		}
 	}
 	
+	public static String getJDBCURL(String dbAddr, String dbName) {
+		switch (Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.DB_MS)) {
+			case PreferenceConstants.DBMS_HSQL:
+				//TODO http://hsqldb.org/doc/src/org/hsqldb/jdbc/JDBCConnection.html
+				return"jdbc:hsqldb:"+dbAddr+"/"+dbName;
+			case PreferenceConstants.DBMS_PSQL:
+				return "jdbc:postgresql://"+dbAddr+"/"+dbName;
+			case PreferenceConstants.DBMS_SQLSERV:
+				//TODO https://msdn.microsoft.com/de-de/library/ms378428%28v=sql.110%29.aspx
+				return "jdbc:sqlserver://"+dbAddr+";databaseName="+dbName;
+			case PreferenceConstants.DBMS_MYSQL:
+			default:
+				System.out.println("jdbc:mysql://"+dbAddr+"/"+dbName);
+				return "jdbc:mysql://"+dbAddr+"/"+dbName;
+				
+		}
+	}
+	
 	/**
 	 * @deprecated No need to find driver manually anymore
 	 * @return The JDBC Driver class for the selected DBMS

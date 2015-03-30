@@ -162,7 +162,7 @@ public class CopyFeature extends OperationImplementation {
 						.add(superClass.getName()+"_"+name, SQLDataType.BIGINT.nullable(!notNull)).getSQL();
 				
 				addRef = context.alterTable(refSuperClass.getName())
-						.add(DSL.constraint(superClass.getName()+"_"+name+"_fk")
+						.add(DSL.constraint(superClass.getName()+"_"+name+FK_SUFFIX)
 								.foreignKey(superClass.getName()+"_"+name)
 								.references(superClass.getName(), 
 										ID))
@@ -175,7 +175,7 @@ public class CopyFeature extends OperationImplementation {
 						.add(type.getName()+"_"+name, SQLDataType.BIGINT.nullable(!notNull)).getSQL();
 				
 				addRef = context.alterTable(superClass.getName())
-						.add(DSL.constraint(type.getName()+"_"+name+"_fk")
+						.add(DSL.constraint(type.getName()+"_"+name+FK_SUFFIX)
 								.foreignKey(type.getName()+"_"+name)
 								.references(refSuperClass.getName(), 
 										ID))
@@ -194,7 +194,7 @@ public class CopyFeature extends OperationImplementation {
 				
 				String addPKs = context.alterTable(eClass.getName()+"_"+name)
 						.add(DSL.constraint(eClass.getName()+"_"+name+PK_SUFFIX)
-								.primaryKey(eClass.getName()+"_e_id",eClass.getName()+"_"+name+IDX_SUFFIX))
+								.primaryKey(eClass.getName()+ID_SUFFIX,eClass.getName()+"_"+name+IDX_SUFFIX))
 						.getSQL();
 				
 				String addFK1 = context.alterTable(eClass.getName()+"_"+name)
