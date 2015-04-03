@@ -1,6 +1,7 @@
 package at.fhv.tedapt.flyway;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -265,19 +266,21 @@ public class FlywayHandler {
 	 * @return Number of releases
 	 */
 	private static int getNumOfReleases(URI uri) {
-		File xmlFile = new File(Platform.getLocation()+uri.toPlatformString(false));
+		
 
 		try {
+			File xmlFile = new File(Platform.getLocation()+uri.toPlatformString(false));
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile);
 			NodeList nList = doc.getElementsByTagName("releases");
 			return nList.getLength();
 		} catch (SAXException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			//e1.printStackTrace();
+			return 1;
 		} catch (ParserConfigurationException e1) {
 			e1.printStackTrace();
-		}
+		} 
 		
 		return -1;
 	}
