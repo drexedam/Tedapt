@@ -1,7 +1,6 @@
 package at.fhv.tedapt.flyway;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,6 +17,8 @@ import org.json.simple.parser.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import com.db4o.foundation.NotImplementedException;
 
 import at.fhv.tedapt.Activator;
 import at.fhv.tedapt.flyway.change.Change;
@@ -75,8 +76,6 @@ public class FlywayHandler {
 			flyway.setTarget(""+targetVersion);
 		}
 		
-		//flyway.baseline();
-		
 		flyway.setLocations("filesystem:"+path);
 		flyway.migrate();
 	
@@ -84,6 +83,11 @@ public class FlywayHandler {
 
 	}
 	
+	/**
+	 * @see #migrateChanges(String)
+	 * @param path Filesystem path to location of changelogs
+	 * @param data Migration data (DB Name, User, ...)
+	 */
 	public static void migrateChanges(String path, MigrationData data) {
 		Flyway flyway = new Flyway();
 		flyway.setBaselineOnMigrate(true);
@@ -112,8 +116,12 @@ public class FlywayHandler {
 		saveVersionInfo();
 	}
 	
+	/**
+	 * Calls the repair functionalities of Flyway
+	 */
 	public static void repairDatabase() {
-		getFlywayObj().repair();
+		throw new NotImplementedException();
+		//getFlywayObj().repair();
 	}
 
 	/**

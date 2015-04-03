@@ -109,6 +109,7 @@ public class DatabaseHandler {
 	 * @return The corresponding SQL data type
 	 */
 	public static String mapDataType(EDataType dataType) {
+		//TODO Mapping of double and others if needed 
 		String dType = dataType.getName();
 		switch (dType) {
 		case "EBigDecimal":

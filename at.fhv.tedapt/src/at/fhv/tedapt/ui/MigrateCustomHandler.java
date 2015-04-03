@@ -14,6 +14,12 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import at.fhv.tedapt.flyway.FlywayHandler;
 import at.fhv.tedapt.ui.dialog.MigrationDialog;
 
+/**
+ * 
+ * @author Damian Drexel
+ * @version 0.1
+ *
+ */
 public class MigrateCustomHandler extends AbstractHandler {
 
 	@Override

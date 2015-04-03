@@ -1,5 +1,13 @@
 package at.fhv.tedapt.helper;
 
+/**
+ * 
+ * @author Damian Drexel
+ * @version 0.1
+ *
+ * Constants for (parts) of column names and other dynamic parts of the database mapping
+ *
+ */
 public class NamingConstants {
 
 	public static String ID = "e_id";

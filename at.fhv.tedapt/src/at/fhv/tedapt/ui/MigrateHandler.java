@@ -48,21 +48,6 @@ public class MigrateHandler extends AbstractHandler {
 	 
 		return null;
 		
-//		MigrateDialog md = new MigrateDialog(null);
-//		md.create();
-//		if(md.open() == Window.OK) {
-//			if(md.getNSURI() == null || md.getNSURI().isEmpty()) {
-//				return null;
-//			}
-//			
-//			
-//			//TODO: Redo
-////			FlywayHandler.setNSPrefix(md.getNSURI());
-//			System.out.println(md.getNSURI());
-//		}
-////		MigrateDialog md = new MigrateDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
-//		FlywayHandler.migrateChanges();
-//		return null;
 	}
 
 }

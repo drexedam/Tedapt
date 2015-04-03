@@ -88,7 +88,9 @@ public class CreateReference extends OperationImplementation {
 		DSLContext context = DatabaseHandler.getContext();
 		if(containment) {
 			SQLChange tempChange = new SQLChange();
+			
 			if(noExistingContReference(superClass)) {
+				//These columns may only be created once!
 				String addCol1 = context.alterTable(refSuperClass.getName())
 						.add(E_CON_CLASS, SQLDataType.VARCHAR.length(255)).getSQL();
 				
@@ -100,6 +102,7 @@ public class CreateReference extends OperationImplementation {
 				
 				tempChange.addQueries(addCol1, addCol2, addCol3);
 			}
+			
 			String addRefCol, addRef;
 			
 			if(upperBound != 1) {
@@ -185,12 +188,16 @@ public class CreateReference extends OperationImplementation {
 	}
 
 
+	/**
+	 * 
+	 * @param eClass
+	 * @return If the class contains a containment reference
+	 */
 	private boolean noExistingContReference(EClass eClass) {
 		if(eClass.getEReferences() == null || eClass.getEReferences().isEmpty()) 
 			return true;
 		
 		for(EReference ref : eClass.getEReferences()) {
-			//System.out.printf("Container: {0}; Containment:{1}"+System.lineSeparator(), ref.isContainer(), ref.isContainment());
 			if(ref.isContainment()) {
 				return false;
 			}

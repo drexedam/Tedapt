@@ -58,9 +58,6 @@ public class MigrationDialog extends TitleAreaDialog {
 	}
 	
 	private void createOutOfOrder(Composite container) {
-//			Label lblOOO = new Label(container, SWT.NONE);
-//			lblOOO.setText("Out of order migration");
-			
 			new Label(container, SWT.NONE).setText("Out of order migration");
 			
 			GridData dataOOO = new GridData();
@@ -73,9 +70,6 @@ public class MigrationDialog extends TitleAreaDialog {
 	}
 
 	private void createMaxVersion(Composite container) {
-//		Label lblMaxV = new Label(container, SWT.NONE);
-//		lblMaxV.setText("Target database version");
-		
 		new Label(container, SWT.NONE).setText("Target datbase version");
 		
 		GridData dataMaxV = new GridData();
@@ -87,9 +81,6 @@ public class MigrationDialog extends TitleAreaDialog {
 	}
 
 	private void createBaseVersion(Composite container) {
-//		Label lblBaseV = new Label(container, SWT.NONE);
-//		lblBaseV.setText("Base database version");
-		
 		new Label(container, SWT.NONE).setText("Base database version");
 		
 		GridData dataBaseV = new GridData();
@@ -101,9 +92,6 @@ public class MigrationDialog extends TitleAreaDialog {
 	}
 
 	private void createUserName(Composite container) {
-//		Label lblUName = new Label(container, SWT.NONE);
-//		lblUName.setText("Username");
-		
 		new Label(container, SWT.NONE).setText("Username");
 		
 		GridData dataUName = new GridData();

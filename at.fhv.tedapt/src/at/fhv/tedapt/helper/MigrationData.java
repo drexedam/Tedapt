@@ -1,5 +1,13 @@
 package at.fhv.tedapt.helper;
 
+/**
+ * 
+ * @author Damian Drexel
+ * @version 0.1
+ *
+ * Wrapper class for migration data entered in the migration dialog
+ *
+ */
 public class MigrationData {
 
 	private String _uName;
