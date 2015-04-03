@@ -10,10 +10,18 @@ public class SQLChange implements Change {
 
 	private StringBuilder _query;
 	
+	public SQLChange() {
+		_query = new StringBuilder();
+	}
 	
 	public SQLChange(String... queries) {
-		_query = new StringBuilder();
-
+		
+		this();
+		
+		addQueries(queries);
+	}
+	
+	public void addQueries(String ... queries) {
 		for(String query : queries) {
 			if(!query.endsWith(";")) {
 				query += ";";

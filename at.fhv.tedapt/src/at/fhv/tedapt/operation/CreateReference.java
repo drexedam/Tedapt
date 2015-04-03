@@ -87,15 +87,19 @@ public class CreateReference extends OperationImplementation {
 		Change change;
 		DSLContext context = DatabaseHandler.getContext();
 		if(containment) {
-			String addCol1 = context.alterTable(refSuperClass.getName())
-					.add(E_CON_CLASS, SQLDataType.VARCHAR.length(255)).getSQL();
-			
-			String addCol2 = context.alterTable(refSuperClass.getName())
-					.add(E_CON, SQLDataType.VARCHAR.length(255)).getSQL();
-			
-			String addCol3 = context.alterTable(refSuperClass.getName())
-					.add(E_CON_FEAT, SQLDataType.VARCHAR.length(255)).getSQL();
-	
+			SQLChange tempChange = new SQLChange();
+			if(noExistingContReference(superClass)) {
+				String addCol1 = context.alterTable(refSuperClass.getName())
+						.add(E_CON_CLASS, SQLDataType.VARCHAR.length(255)).getSQL();
+				
+				String addCol2 = context.alterTable(refSuperClass.getName())
+						.add(E_CON, SQLDataType.VARCHAR.length(255)).getSQL();
+				
+				String addCol3 = context.alterTable(refSuperClass.getName())
+						.add(E_CON_FEAT, SQLDataType.VARCHAR.length(255)).getSQL();
+				
+				tempChange.addQueries(addCol1, addCol2, addCol3);
+			}
 			String addRefCol, addRef;
 			
 			if(upperBound != 1) {
@@ -125,7 +129,10 @@ public class CreateReference extends OperationImplementation {
 						.getSQL();
 				
 			}
-			change = new SQLChange(addCol1, addCol2, addCol3, addRefCol, addRef);
+			
+			tempChange.addQueries(addRefCol, addRef);
+			
+			change = tempChange;
 		} else {
 			if(upperBound != 1) {
 				// create table for reference
@@ -175,6 +182,21 @@ public class CreateReference extends OperationImplementation {
 		FlywayHandler.saveChangelog(
 				HistoryUtils.getHistoryURI(
 						metamodel.getEPackages().get(0).eResource()), "Create Reference "+name);
+	}
+
+
+	private boolean noExistingContReference(EClass eClass) {
+		if(eClass.getEReferences() == null || eClass.getEReferences().isEmpty()) 
+			return true;
+		
+		for(EReference ref : eClass.getEReferences()) {
+			//System.out.printf("Container: {0}; Containment:{1}"+System.lineSeparator(), ref.isContainer(), ref.isContainment());
+			if(ref.isContainment()) {
+				return false;
+			}
+		}
+			
+		return true;
 	}
 
 }
