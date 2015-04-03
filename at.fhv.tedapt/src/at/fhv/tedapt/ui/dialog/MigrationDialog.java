@@ -12,7 +12,9 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import at.fhv.tedapt.Activator;
 import at.fhv.tedapt.helper.MigrationData;
+import at.fhv.tedapt.preferences.PreferenceConstants;
 
 public class MigrationDialog extends TitleAreaDialog {
 	
@@ -110,6 +112,7 @@ public class MigrationDialog extends TitleAreaDialog {
 		
 		txtUName = new Text(container, SWT.BORDER);
 		txtUName.setLayoutData(dataUName);
+		txtUName.setText(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_UNAME));
 	}
 	
 	private void createPassword(Composite container) {
@@ -122,6 +125,7 @@ public class MigrationDialog extends TitleAreaDialog {
 		
 		txtPW = new Text(container, SWT.BORDER);
 		txtPW.setLayoutData(dataPW);
+		txtPW.setText(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PW));
 	}
 	
 	private void createDBAdr(Composite container) {
@@ -134,6 +138,7 @@ public class MigrationDialog extends TitleAreaDialog {
 		
 		txtDBAdr = new Text(container, SWT.BORDER);
 		txtDBAdr.setLayoutData(dataDBAdr);
+		txtDBAdr.setText(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.DB_ADDRESS));
 	}
 	
 	private void createDBName(Composite container) {
@@ -146,6 +151,7 @@ public class MigrationDialog extends TitleAreaDialog {
 		
 		txtDBName = new Text(container, SWT.BORDER);
 		txtDBName.setLayoutData(dataDBName);
+		txtDBName.setText(Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.DB_NAME));
 	}
 	
 	@Override
