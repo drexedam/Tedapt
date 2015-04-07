@@ -95,7 +95,7 @@ public class DatabaseHandler {
 		case PreferenceConstants.DBMS_PSQL:
 			return SQLDialect.POSTGRES;
 		case PreferenceConstants.DBMS_SQLSERV:
-			//SQL Server not support by free version
+			//SQL Server not supported by free version
 		case PreferenceConstants.DBMS_MYSQL:
 		default:
 			return SQLDialect.MYSQL;
@@ -139,6 +139,9 @@ public class DatabaseHandler {
 		case "EShort":
 		case "EShortObject":
 			return "smallint(6)";
+		case "EDouble":
+		case "EDoubleObject":
+			return "double";
 		case "EJavaObject":
 		case "EString":
 		default:
@@ -159,32 +162,35 @@ public class DatabaseHandler {
 			return SQLDataType.DECIMAL;
 		case "EBoolean":
 		case "EBooleanObject":
-			return SQLDataType.BIT.length(1);//"bit(1)";
+			return SQLDataType.BIT.length(1);
 		case "EByte":
 		case "EByteObject":
 		case "EByteArray":
-			return SQLDataType.TINYINT;//"tinyint(4)";
+			return SQLDataType.TINYINT;
 		case "EChar":
 		case "ECharacterObject":
-			return SQLDataType.CHAR.length(1);//"char(1)";
+			return SQLDataType.CHAR.length(1);
 		case "EDate":
-			return SQLDataType.DATE; //"datetime";
+			return SQLDataType.DATE; 
 		case "EFloat":
 		case "EFloatObject":
-			return SQLDataType.FLOAT; //"float";
+			return SQLDataType.FLOAT; 
 		case "EInt":
 		case "EIntegerObject":
-			return SQLDataType.INTEGER; //"int(11)";
+			return SQLDataType.INTEGER; 
 		case "ELong":
 		case "ELongObject":
-			return SQLDataType.BIGINT; //"bigint(20)";
+			return SQLDataType.BIGINT; 
 		case "EShort":
 		case "EShortObject":
-			return SQLDataType.SMALLINT; //"smallint(6)";
+			return SQLDataType.SMALLINT; 
+		case "EDouble":
+		case "EDoubleObject":
+			return SQLDataType.DOUBLE;
 		case "EJavaObject":
 		case "EString":
 		default:
-			return SQLDataType.VARCHAR.length(255); //"varchar(255)";
+			return SQLDataType.VARCHAR.length(255); 
 		}
 	}
 	
