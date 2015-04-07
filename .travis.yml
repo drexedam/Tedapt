@@ -8,7 +8,7 @@ jdk:
 deploy:
   provider: releases
   api_key: 262d9aba83ee09a255cd6107333c9a7dc962eaa1
-  local-dir: ./at.fhv.tedapt.releng.p2
+  local-dir: /home/travis/build/drexedam/Tedapt/at.fhv.tedapt.releng.p2
   skip_cleanup: true
   on:
     tags: true
