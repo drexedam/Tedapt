@@ -45,13 +45,6 @@
          unpack="false"/>
 
    <plugin
-         id="at.fhv.tedapt.library.jooq"
-         download-size="0"
-         install-size="0"
-         version="1.0.0.qualifier"
-         unpack="false"/>
-
-   <plugin
          id="at.fhv.tedapt.library.jsonsimple"
          download-size="0"
          install-size="0"
