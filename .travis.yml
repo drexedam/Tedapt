@@ -1,0 +1,7 @@
+language: java
+
+install: cd at.fhv.tedapt.releng; mvn clean install -DskipTests=true
+
+jdk:
+  - oraclejdk8
+  - oraclejdk7
