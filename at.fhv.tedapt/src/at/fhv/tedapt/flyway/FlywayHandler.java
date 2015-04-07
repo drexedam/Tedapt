@@ -166,7 +166,7 @@ public class FlywayHandler {
 			}
 			
 			
-			System.out.println(d.getCanonicalPath());
+			//System.out.println(d.getCanonicalPath());
 			File f = new File(Platform.getLocation()
 								+getChangelogFolder()
 								+"/V"+_version+"_"+_numOfTask+"__"+operationName.replace(" ", "_")+".sql");

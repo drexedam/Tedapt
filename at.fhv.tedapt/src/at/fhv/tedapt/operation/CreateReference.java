@@ -71,14 +71,6 @@ public class CreateReference extends OperationImplementation {
 	@Override
 	public void execute(Metamodel metamodel, Model model) {
 
-
-		//Metamodel changes
-		EReference reference = MetamodelFactory.newEReference(eClass, name, type,
-				lowerBound, upperBound, containment);
-		if (opposite != null) {
-			metamodel.setEOpposite(opposite, reference);
-		}
-		
 		//DB changes
 		
 		EClass superClass = CommonTasks.getMostAbstract(eClass);
@@ -180,6 +172,15 @@ public class CreateReference extends OperationImplementation {
 			}
 		}
 		
+		
+		//Metamodel changes
+		EReference reference = MetamodelFactory.newEReference(eClass, name, type,
+				lowerBound, upperBound, containment);
+		if (opposite != null) {
+			metamodel.setEOpposite(opposite, reference);
+		}
+		
+		//Save DB changes
 		FlywayHandler.addChange(change);
 		
 		FlywayHandler.saveChangelog(
