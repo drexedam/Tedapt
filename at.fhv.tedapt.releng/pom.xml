@@ -71,5 +71,6 @@
  	<module>../at.fhv.tedapt.library.jsonsimple</module>
  	<module>../at.fhv.tedapt.library.flyaway</module>
  	
+ 	<module>../at.fhv.tedapt.library.jooq</module>
  </modules>
 </project>
