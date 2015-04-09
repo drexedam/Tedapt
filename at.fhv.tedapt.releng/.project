@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>pom.xml</name>
+			<type>1</type>
+			<location>E:/bitBucket/tedapt/pom.xml</location>
+		</link>
+	</linkedResources>
 </projectDescription>

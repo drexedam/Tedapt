@@ -65,12 +65,12 @@
   
   
  <modules>
- 	<module>../at.fhv.tedapt</module>
- 	<module>../at.fhv.tedapt.releng.p2</module>
- 	<module>../at.fhv.tedapt.feature</module>
- 	<module>../at.fhv.tedapt.library.jsonsimple</module>
- 	<module>../at.fhv.tedapt.library.flyaway</module>
+ 	<module>at.fhv.tedapt</module>
+ 	<module>at.fhv.tedapt.releng.p2</module>
+ 	<module>at.fhv.tedapt.feature</module>
+ 	<module>at.fhv.tedapt.library.jsonsimple</module>
+ 	<module>at.fhv.tedapt.library.flyaway</module>
  	
- 	<module>../at.fhv.tedapt.library.jooq</module>
+ 	<module>at.fhv.tedapt.library.jooq</module>
  </modules>
 </project>
