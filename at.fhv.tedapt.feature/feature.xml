@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="at.fhv.tedapt.feature"
-      label="Feature"
+      label="Tedapt"
       version="1.0.0.qualifier">
 
    <description url="http://www.example.com/description">
@@ -24,10 +24,10 @@
       <import plugin="org.eclipse.emf.edapt.common" version="1.0.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.emf.edapt.migration" version="1.0.1" match="greaterOrEqual"/>
       <import plugin="org.hibernate"/>
-      <import plugin="org.apache.log4j"/>
-      <import plugin="org.eclipse.emf.ecore"/>
-      <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.eclipse.emf.edapt.history" version="1.0.1" match="greaterOrEqual"/>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.emf.ecore" version="2.10.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin

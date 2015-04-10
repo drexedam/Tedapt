@@ -1,7 +1,7 @@
 if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   echo -e "Updating GH-pages.\n"
   
-  cp -R at.fhv.tedapt.releng.p2/target $HOME/p2
+  cp -R at.fhv.tedapt.releng.p2/target/repository $HOME/Tedapt
   
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
@@ -9,7 +9,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   
   git clone --quiet https://${GH_TOKEN}@github.com/drexedam/drexedam.github.io.git  > /dev/null
   cd drexedam.github.io
-  cp -Rf $HOME/p2/ .
+  cp -Rf $HOME/Tedapt/ .
   
   git add -f .
   git commit -m "Travis build $TRAVIS_BUILD_NUMBER"

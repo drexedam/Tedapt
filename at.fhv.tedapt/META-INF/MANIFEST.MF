@@ -20,10 +20,10 @@ Require-Bundle: org.eclipse.ui,
  org.apache.log4j,
  at.fhv.tedapt.library.flyaway;bundle-version="1.0.0",
  at.fhv.tedapt.library.jsonsimple;bundle-version="1.0.0",
- org.eclipse.emf.ecore;bundle-version="2.10.2"
+ org.eclipse.emf.ecore;bundle-version="2.10.2",
+ at.fhv.tedapt.library.jooq;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: at.fhv.tedapt;uses:="org.osgi.framework,org.eclipse.ui.plugin"
 Import-Package: org.eclipse.jdt.core
-Bundle-ClassPath: .,
- lib/jooq-3.6.0-SNAPSHOT.jar
+Bundle-ClassPath: .
