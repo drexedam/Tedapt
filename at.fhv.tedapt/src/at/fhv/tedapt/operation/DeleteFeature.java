@@ -113,10 +113,13 @@ public class DeleteFeature extends OperationImplementation {
 		
 		if(ref.isContainment()) {
 			
+			SQLChange tempChange = new SQLChange();
+			
 			if(CommonTasks.existingContReference(superClass)) {
 				String dropEconClass = context.alterTable(refSuperClass.getName()).dropColumn(E_CON_CLASS).getSQL();
 				String dropEcon = context.alterTable(refSuperClass.getName()).dropColumn(E_CON).getSQL();
 				String dropEconFeatName = context.alterTable(refSuperClass.getName()).dropColumn(E_CON_FEAT).getSQL();
+				tempChange.addQueries(dropEcon, dropEconClass, dropEconFeatName);
 			}
 			
 			String dropFK, dropCol;
@@ -128,7 +131,9 @@ public class DeleteFeature extends OperationImplementation {
 				dropCol = context.alterTable(superClass.getName()).dropColumn(type.getName()+"_"+ref.getName()).getSQL();
 			}
 			
-			change = new SQLChange(dropEconClass, dropEcon, dropEconFeatName, dropFK, dropCol);
+			tempChange.addQueries(dropFK, dropCol);
+			
+			change = tempChange;
 			
 		} else {
 			if(ref.getUpperBound() != 1) { 
