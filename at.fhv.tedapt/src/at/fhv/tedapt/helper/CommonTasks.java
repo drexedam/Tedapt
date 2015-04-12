@@ -1,6 +1,7 @@
 package at.fhv.tedapt.helper;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EReference;
 
 /**
  * 
@@ -27,5 +28,23 @@ public class CommonTasks {
 	 */
 	public static EClass getMostAbstract(EClass eClass) {
 		return eClass.getEAllSuperTypes().isEmpty() ? eClass : eClass.getEAllSuperTypes().get(0);
+	}
+	
+	/**
+	 * 
+	 * @param eClass
+	 * @return If the class contains a containment reference
+	 */
+	public static boolean existingContReference(EClass eClass) {
+		if(eClass.getEReferences() == null || eClass.getEReferences().isEmpty()) 
+			return false;
+		
+		for(EReference ref : eClass.getEReferences()) {
+			if(ref.isContainment()) {
+				return true;
+			}
+		}
+			
+		return false;
 	}
 }

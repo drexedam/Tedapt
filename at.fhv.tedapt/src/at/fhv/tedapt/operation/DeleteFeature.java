@@ -112,9 +112,12 @@ public class DeleteFeature extends OperationImplementation {
 		EClass refSuperClass  = CommonTasks.getMostAbstract(type);
 		
 		if(ref.isContainment()) {
-			String dropEconClass = context.alterTable(refSuperClass.getName()).dropColumn(E_CON_CLASS).getSQL();
-			String dropEcon = context.alterTable(refSuperClass.getName()).dropColumn(E_CON).getSQL();
-			String dropEconFeatName = context.alterTable(refSuperClass.getName()).dropColumn(E_CON_FEAT).getSQL();
+			
+			if(CommonTasks.existingContReference(superClass)) {
+				String dropEconClass = context.alterTable(refSuperClass.getName()).dropColumn(E_CON_CLASS).getSQL();
+				String dropEcon = context.alterTable(refSuperClass.getName()).dropColumn(E_CON).getSQL();
+				String dropEconFeatName = context.alterTable(refSuperClass.getName()).dropColumn(E_CON_FEAT).getSQL();
+			}
 			
 			String dropFK, dropCol;
 			if(ref.getUpperBound() != 1) {

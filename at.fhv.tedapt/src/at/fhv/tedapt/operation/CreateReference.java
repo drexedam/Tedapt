@@ -81,7 +81,7 @@ public class CreateReference extends OperationImplementation {
 		if(containment) {
 			SQLChange tempChange = new SQLChange();
 			
-			if(noExistingContReference(superClass)) {
+			if(!CommonTasks.existingContReference(superClass)) {
 				//These columns may only be created once!
 				String addCol1 = context.alterTable(refSuperClass.getName())
 						.add(E_CON_CLASS, SQLDataType.VARCHAR.length(255)).getSQL();
@@ -188,23 +188,5 @@ public class CreateReference extends OperationImplementation {
 						metamodel.getEPackages().get(0).eResource()), "Create Reference "+name);
 	}
 
-
-	/**
-	 * 
-	 * @param eClass
-	 * @return If the class contains a containment reference
-	 */
-	private boolean noExistingContReference(EClass eClass) {
-		if(eClass.getEReferences() == null || eClass.getEReferences().isEmpty()) 
-			return true;
-		
-		for(EReference ref : eClass.getEReferences()) {
-			if(ref.isContainment()) {
-				return false;
-			}
-		}
-			
-		return true;
-	}
 
 }
