@@ -17,5 +17,11 @@ JSON.simple library as plugin to be used by at.fhv.tedapt
 ### at.fhv.tedapt.library.jooq ###
 jOOQ library as plugin to be used by at.fhv.tedapt
 
+### at.fhv.tedapt.feature ###
+Eclipse feature
+
+### at,fhv.tedapt.releng.p2 ###
+Plugin update site
+
 ### at.fhv.tedapt.test ###
 JUnit Tests
