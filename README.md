@@ -1,4 +1,7 @@
-# README #
+# Tedapt #
+
+### Status
+[![Build Status](https://travis-ci.org/drexedam/Tedapt.svg?branch=master)](https://travis-ci.org/drexedam/Tedapt)
 
 ## Structure ##
 
