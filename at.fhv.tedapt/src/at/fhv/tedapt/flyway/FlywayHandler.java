@@ -18,8 +18,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.db4o.foundation.NotImplementedException;
-
 import at.fhv.tedapt.Activator;
 import at.fhv.tedapt.flyway.change.Change;
 import at.fhv.tedapt.helper.MigrationData;
@@ -120,7 +118,7 @@ public class FlywayHandler {
 	 * Calls the repair functionalities of Flyway
 	 */
 	public static void repairDatabase() {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 		//getFlywayObj().repair();
 	}
 
