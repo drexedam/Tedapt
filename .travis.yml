@@ -3,5 +3,9 @@ language: java
 jdk:
   - oraclejdk7
 
+branches:
+  only:
+    - master
+  
 script: mvn install -DskipTests=true;
 after_success: chmod +x ghs_update.sh; ./ghs_update.sh
