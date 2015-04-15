@@ -11,7 +11,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.edapt.common;bundle-version="1.0.1",
  org.eclipse.emf.edapt.migration;bundle-version="1.0.1",
  org.hibernate,
- com.mysql.jdbc;bundle-version="5.1.26";resolution:=optional,
  com.db4o;bundle-version="8.0.249";resolution:=optional,
  com.microsoft.sqlserver.jdbc;bundle-version="4.0.2206";resolution:=optional,
  org.hsqldb;bundle-version="2.3.2";resolution:=optional,
@@ -21,7 +20,8 @@ Require-Bundle: org.eclipse.ui,
  at.fhv.tedapt.library.flyaway;bundle-version="1.0.0",
  at.fhv.tedapt.library.jsonsimple;bundle-version="1.0.0",
  org.eclipse.emf.ecore;bundle-version="2.10.2",
- at.fhv.tedapt.library.jooq;bundle-version="1.0.0"
+ at.fhv.tedapt.library.jooq;bundle-version="1.0.0",
+ at.fhv.tedapt.library.mysqlconnector;bundle-version="1.0.0";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: at.fhv.tedapt;uses:="org.osgi.framework,org.eclipse.ui.plugin"

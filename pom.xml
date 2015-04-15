@@ -72,5 +72,6 @@
  	<module>at.fhv.tedapt.library.flyaway</module>
  	
  	<module>at.fhv.tedapt.library.jooq</module>
+ 	<module>at.fhv.tedapt.library.mysqlconnector</module>
  </modules>
 </project>
