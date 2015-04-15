@@ -46,9 +46,9 @@ public class MigrateCustomHandler extends AbstractHandler {
 						
 			
 			if(path.getFileExtension().equals("history")) {
-				String pathToChangelogs = path.toPortableString();
-
-				pathToChangelogs = pathToChangelogs.substring(0, pathToChangelogs.length()-(".history").length());
+				String pathToChangelogs = path.removeFileExtension().toPortableString();
+				
+				//Cannot use append() of IPath because it would result in pathToChangelogs/_tedapt instead of pathToChangelogs_tedapt
 				pathToChangelogs = pathToChangelogs + FlywayHandler.TEDAPT_POSTFIX + FlywayHandler.CHANGELOG_FOLDER;
 				
 				FlywayHandler.migrateChanges(pathToChangelogs, md.getData());
