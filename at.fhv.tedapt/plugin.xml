@@ -116,5 +116,11 @@
             class="at.fhv.tedapt.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.ui.statusHandlers">
+         <statusHandler
+         	id="at.fhv.tedapt.TedaptStatusHandler"
+         	class="at.fhv.tedapt.status.TedaptStatusHandler" />
+   </extension>
 
 </plugin>

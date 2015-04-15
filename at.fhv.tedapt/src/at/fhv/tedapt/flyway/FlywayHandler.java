@@ -8,8 +8,10 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.flywaydb.core.Flyway;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,6 +24,8 @@ import at.fhv.tedapt.Activator;
 import at.fhv.tedapt.flyway.change.Change;
 import at.fhv.tedapt.helper.MigrationData;
 import at.fhv.tedapt.preferences.PreferenceConstants;
+import at.fhv.tedapt.status.TedaptStatusCode;
+import at.fhv.tedapt.status.TedaptStatus;
 
 /**
  * 
@@ -57,27 +61,37 @@ public class FlywayHandler {
 	 * Updates the database to the newest version based on all changelogs safed by.
 	 */
 	public static void migrateChanges(String path) {
-		Flyway flyway = getFlywayObj();
+
+		try {
+			Flyway flyway = getFlywayObj();
+			
+			//Are out of order migrations allowed? (e.g. V1 and V3 are applied but V2 is found)
+			flyway.setOutOfOrder(Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.FLYWAY_OUT_OF_ORDER));
+			
+			//Experimental
+			int baseLineVersion = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.FLYWAY_BASE_VERSION);
+			if(baseLineVersion > 0) {
+				flyway.setBaselineVersion(""+baseLineVersion);
+			}
+			
+			//Experimental
+			int targetVersion = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.FLYWAY_TARGET_VERSION);
+			if(targetVersion > 0) {
+				flyway.setTarget(""+targetVersion);
+			}
+			
+			flyway.setLocations("filesystem:"+path);
+			flyway.migrate();
 		
-		//Are out of order migrations allowed? (e.g. V1 and V3 are applied but V2 is found)
-		flyway.setOutOfOrder(Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.FLYWAY_OUT_OF_ORDER));
-		
-		//Experimental
-		int baseLineVersion = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.FLYWAY_BASE_VERSION);
-		if(baseLineVersion > 0) {
-			flyway.setBaselineVersion(""+baseLineVersion);
+			saveVersionInfo();
+
+			StatusManager.getManager().handle(new TedaptStatus(IStatus.OK, TedaptStatusCode.MIGRATION_OK), 
+					StatusManager.LOG | StatusManager.SHOW);
+		} catch(Exception ex) {
+			StatusManager.getManager().handle(new TedaptStatus(IStatus.ERROR, TedaptStatusCode.MIGRATION_FAILED, ex), 
+					StatusManager.LOG | StatusManager.SHOW);
 		}
 		
-		//Experimental
-		int targetVersion = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.FLYWAY_TARGET_VERSION);
-		if(targetVersion > 0) {
-			flyway.setTarget(""+targetVersion);
-		}
-		
-		flyway.setLocations("filesystem:"+path);
-		flyway.migrate();
-	
-		saveVersionInfo();
 
 	}
 	
@@ -87,31 +101,41 @@ public class FlywayHandler {
 	 * @param data Migration data (DB Name, User, ...)
 	 */
 	public static void migrateChanges(String path, MigrationData data) {
-		Flyway flyway = new Flyway();
-		flyway.setBaselineOnMigrate(true);
-		flyway.setDataSource(DatabaseHandler.getJDBCURL(data.getDBAdr(), data.getDBName()),
-				data.getUName(), 
-				data.getPW());
-		
-		
-		flyway.setOutOfOrder(data.outOfOrder());
-		
-		//Experimental
-		int baseLineVersion = data.getBaseVersion();
-		if(baseLineVersion > 0) {
-			flyway.setBaselineVersion(""+baseLineVersion);
+		try {
+			Flyway flyway = new Flyway();
+			flyway.setBaselineOnMigrate(true);
+			flyway.setDataSource(DatabaseHandler.getJDBCURL(data.getDBAdr(), data.getDBName()),
+					data.getUName(), 
+					data.getPW());
+			
+			
+			flyway.setOutOfOrder(data.outOfOrder());
+			
+			//Experimental
+			int baseLineVersion = data.getBaseVersion();
+			if(baseLineVersion > 0) {
+				flyway.setBaselineVersion(""+baseLineVersion);
+			}
+			
+			//Experimental
+			int targetVersion = data.getMaxVersion();
+			if(targetVersion > 0) {
+				flyway.setTarget(""+targetVersion);
+			}
+			
+			flyway.setLocations("filesystem:"+path);
+			flyway.migrate();
+			
+			saveVersionInfo();
+
+			StatusManager.getManager().handle(new TedaptStatus(IStatus.OK, TedaptStatusCode.MIGRATION_OK), 
+					StatusManager.LOG | StatusManager.SHOW);
+		} catch(Exception ex) {
+
+			StatusManager.getManager().handle(new TedaptStatus(IStatus.ERROR, TedaptStatusCode.MIGRATION_FAILED, ex), 
+					StatusManager.LOG | StatusManager.SHOW);
 		}
 		
-		//Experimental
-		int targetVersion = data.getMaxVersion();
-		if(targetVersion > 0) {
-			flyway.setTarget(""+targetVersion);
-		}
-		
-		flyway.setLocations("filesystem:"+path);
-		flyway.migrate();
-		
-		saveVersionInfo();
 	}
 	
 	/**
@@ -180,6 +204,8 @@ public class FlywayHandler {
 			saveVersionInfo();
 			
 		} catch (IOException ex) {
+			StatusManager.getManager().handle(new TedaptStatus(IStatus.ERROR, TedaptStatusCode.FILE_SAVE_FAILED, "[Changelog]", ex), 
+					StatusManager.LOG | StatusManager.SHOW);
 			ex.printStackTrace();
 		}
 	}
@@ -239,8 +265,10 @@ public class FlywayHandler {
 			JSONObject jobj = (JSONObject) jparser.parse(new FileReader(f));
 			_version = (Long) jobj.get("version");
 			_numOfTask = (Long) jobj.get("numOfTask");
-		} catch (IOException | ParseException e) {
-			e.printStackTrace();
+		} catch (IOException | ParseException ex) {
+			StatusManager.getManager().handle(new TedaptStatus(IStatus.ERROR, TedaptStatusCode.FILE_SAVE_FAILED, "[Additional information file]", ex), 
+					StatusManager.LOG | StatusManager.SHOW);
+			ex.printStackTrace();
 		}
 		
 	}
@@ -261,8 +289,10 @@ public class FlywayHandler {
 			fw.write(jobject.toJSONString());
 			fw.flush();
 			fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ex) {
+			StatusManager.getManager().handle(new TedaptStatus(IStatus.ERROR, TedaptStatusCode.FILE_READ_FAILED, "[Additional information file]", ex), 
+					StatusManager.LOG | StatusManager.SHOW);
+			ex.printStackTrace();
 		}
 	}
 	
@@ -279,13 +309,14 @@ public class FlywayHandler {
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile);
 			NodeList nList = doc.getElementsByTagName("releases");
 			return nList.getLength();
-		} catch (SAXException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
+		} catch (SAXException | ParserConfigurationException ex) {
+			StatusManager.getManager().handle(new TedaptStatus(IStatus.ERROR, TedaptStatusCode.XML_PARSE_ERROR, "while getting number of releases", ex), 
+					StatusManager.LOG | StatusManager.SHOW);
+			ex.printStackTrace();
+		} catch (IOException ex) {
 			//e1.printStackTrace();
+			//Maybe History does not exist by now so it is release #1
 			return 1;
-		} catch (ParserConfigurationException e1) {
-			e1.printStackTrace();
 		} 
 		
 		return -1;
