@@ -83,7 +83,7 @@ public class FlywayHandler {
 			flyway.setLocations("filesystem:"+path);
 			flyway.migrate();		
 			
-			path = path.substring(0, path.length()-CHANGELOG_FOLDER.length())+".json";
+			path.replace(CHANGELOG_FOLDER, ".json");
 			saveVersioInfo(path);
 
 			StatusManager.getManager().handle(new TedaptStatus(IStatus.OK, TedaptStatusCode.MIGRATION_OK), 
@@ -127,7 +127,7 @@ public class FlywayHandler {
 			flyway.setLocations("filesystem:"+path);
 			flyway.migrate();
 			
-			path = path.substring(0, path.length()-CHANGELOG_FOLDER.length())+".json";
+			path.replace(CHANGELOG_FOLDER, ".json");
 			saveVersioInfo(path);
 
 			StatusManager.getManager().handle(new TedaptStatus(IStatus.OK, TedaptStatusCode.MIGRATION_OK), 
