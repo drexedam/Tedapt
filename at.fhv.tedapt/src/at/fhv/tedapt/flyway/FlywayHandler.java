@@ -81,9 +81,10 @@ public class FlywayHandler {
 			}
 			
 			flyway.setLocations("filesystem:"+path);
-			flyway.migrate();
-		
-			saveVersionInfo();
+			flyway.migrate();		
+			
+			path = path.substring(0, path.length()-CHANGELOG_FOLDER.length())+".json";
+			saveVersioInfo(path);
 
 			StatusManager.getManager().handle(new TedaptStatus(IStatus.OK, TedaptStatusCode.MIGRATION_OK), 
 					StatusManager.LOG | StatusManager.SHOW);
@@ -126,7 +127,8 @@ public class FlywayHandler {
 			flyway.setLocations("filesystem:"+path);
 			flyway.migrate();
 			
-			saveVersionInfo();
+			path = path.substring(0, path.length()-CHANGELOG_FOLDER.length())+".json";
+			saveVersioInfo(path);
 
 			StatusManager.getManager().handle(new TedaptStatus(IStatus.OK, TedaptStatusCode.MIGRATION_OK), 
 					StatusManager.LOG | StatusManager.SHOW);
@@ -277,12 +279,12 @@ public class FlywayHandler {
 	 * Writes version information to corresponding json file
 	 */
 	@SuppressWarnings("unchecked")
-	private static void saveVersionInfo() {
+	private static void saveVersioInfo(String file) {
 		JSONObject jobject = new JSONObject();
 		jobject.put("version", new Integer((int) _version));
 		jobject.put("numOfTask", new Integer((int) _numOfTask));
 		
-		File f = new File(Platform.getLocation()+getChangelogFolder()+".json");
+		File f = new File(file);
 		
 		try {
 			FileWriter fw = new FileWriter(f, false);
@@ -294,6 +296,11 @@ public class FlywayHandler {
 					StatusManager.LOG | StatusManager.SHOW);
 			ex.printStackTrace();
 		}
+	}
+	
+	
+	private static void saveVersionInfo() {
+		saveVersioInfo(Platform.getLocation()+getChangelogFolder()+".json");
 	}
 	
 	/**
