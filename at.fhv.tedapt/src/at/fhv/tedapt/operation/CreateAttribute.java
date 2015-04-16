@@ -1,19 +1,19 @@
 package at.fhv.tedapt.operation;
 
 import static at.fhv.tedapt.helper.NamingConstants.FK_SUFFIX;
+import static at.fhv.tedapt.helper.NamingConstants.ID;
 import static at.fhv.tedapt.helper.NamingConstants.IDX_SUFFIX;
 import static at.fhv.tedapt.helper.NamingConstants.ID_SUFFIX;
-import static at.fhv.tedapt.helper.NamingConstants.ID;
 import static at.fhv.tedapt.helper.NamingConstants.PK_SUFFIX;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.edapt.common.MetamodelFactory;
 import org.eclipse.emf.edapt.declaration.EdaptConstraint;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
 import org.eclipse.emf.edapt.declaration.EdaptParameter;
 import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.history.util.HistoryUtils;
+import org.eclipse.emf.edapt.internal.common.MetamodelFactory;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 import org.jooq.DSLContext;

@@ -54,7 +54,7 @@
   <repository>
   <id>Edapt</id>
   <layout>p2</layout>
-  <url>http://download.eclipse.org/edapt/releases/10x/</url>
+  <url>http://download.eclipse.org/edapt/releases/11x/</url>
   </repository>
   <repository>
   <id>EMF</id>
