@@ -10,11 +10,7 @@ import static at.fhv.tedapt.helper.NamingConstants.ID_SUFFIX;
 import static at.fhv.tedapt.helper.NamingConstants.PK_SUFFIX;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edapt.internal.common.MetamodelFactory;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
-import org.eclipse.emf.edapt.declaration.EdaptParameter;
-import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.history.util.HistoryUtils;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
@@ -36,35 +32,9 @@ import at.fhv.tedapt.helper.CommonTasks;
  */
 @SuppressWarnings("restriction")
 @EdaptOperation(identifier = "newReferenceTedapt", label = "Create Reference Tedapt", description = "Creates a new reference and corresponding database entries.")
-public class CreateReference extends OperationImplementation {
+public class CreateReference extends org.eclipse.emf.edapt.declaration.creation.NewReference {
 
-	/** {@description} */
-	@EdaptParameter(main = true, description = "The class in which the reference is created")
-	public EClass eClass;
 
-	/** {@description} */
-	@EdaptParameter(description = "The name of the new reference")
-	public String name;
-
-	/** {@description} */
-	@EdaptParameter(description = "The type of the new reference")
-	public EClass type;
-
-	/** {@description} */
-	@EdaptParameter(description = "The lower bound of the new reference")
-	public int lowerBound = 0;
-
-	/** {@description} */
-	@EdaptParameter(description = "The upper bound of the new reference")
-	public int upperBound = 1;
-
-	/** {@description} */
-	@EdaptParameter(description = "Whether the new reference is a containment reference")
-	public Boolean containment = false;
-
-	/** {@description} */
-	@EdaptParameter(description = "The opposite reference of the new reference", optional = true)
-	public EReference opposite;
 	
 
 	/** {@inheritDoc} */
@@ -174,11 +144,7 @@ public class CreateReference extends OperationImplementation {
 		
 		
 		//Metamodel changes
-		EReference reference = MetamodelFactory.newEReference(eClass, name, type,
-				lowerBound, upperBound, containment);
-		if (opposite != null) {
-			metamodel.setEOpposite(opposite, reference);
-		}
+		super.execute(metamodel, model);
 		
 		//Save DB changes
 		FlywayHandler.addChange(change);

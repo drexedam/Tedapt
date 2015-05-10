@@ -6,14 +6,9 @@ import static at.fhv.tedapt.helper.NamingConstants.IDX_SUFFIX;
 import static at.fhv.tedapt.helper.NamingConstants.ID_SUFFIX;
 import static at.fhv.tedapt.helper.NamingConstants.PK_SUFFIX;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.edapt.declaration.EdaptConstraint;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
-import org.eclipse.emf.edapt.declaration.EdaptParameter;
-import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.history.util.HistoryUtils;
-import org.eclipse.emf.edapt.internal.common.MetamodelFactory;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 import org.jooq.DSLContext;
@@ -36,31 +31,8 @@ import at.fhv.tedapt.helper.CommonTasks;
 
 @SuppressWarnings("restriction")
 @EdaptOperation(identifier="createAttributeTedapt", label="Create Attribute Tedapt", description="A new attribute and the coresponding column are created.")
-public class CreateAttribute extends OperationImplementation {
+public class CreateAttribute extends org.eclipse.emf.edapt.declaration.creation.NewAttribute {
 
-	/** {@description} */
-	@EdaptParameter(main = true, description = "The class in which the attribute is created")
-	public EClass eClass;
-
-	/** {@description} */
-	@EdaptParameter(description = "The name of the new attribute")
-	public String name;
-
-	/** {@description} */
-	@EdaptParameter(description = "The type of the new attribute")
-	public EDataType type;
-
-	/** {@description} */
-	@EdaptParameter(description = "The lower bound of the new attribute")
-	public int lowerBound = 0;
-
-	/** {@description} */
-	@EdaptParameter(description = "The upper bound of the new reference")
-	public int upperBound = 1;
-
-	/** {@description} */
-	@EdaptParameter(description = "The default value literal", optional = true)
-	public String defaultValue;
 	
 	/** {@description} */
 	@EdaptConstraint(description="Not nullable attributes need a default value")
@@ -76,9 +48,7 @@ public class CreateAttribute extends OperationImplementation {
 	@Override
 	public void execute(Metamodel metamodel, Model model) {
 		
-		//Metamodel adaption
-		MetamodelFactory.newEAttribute(eClass, name, type, lowerBound,
-				upperBound, defaultValue);
+		super.execute(metamodel, model);
 		
 		//DB adaption
 		

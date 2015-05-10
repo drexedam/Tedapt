@@ -4,17 +4,8 @@ import static at.fhv.tedapt.helper.NamingConstants.DTYPE;
 import static at.fhv.tedapt.helper.NamingConstants.E_VERS;
 import static at.fhv.tedapt.helper.NamingConstants.ID;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
-import org.eclipse.emf.edapt.declaration.EdaptParameter;
-import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.history.util.HistoryUtils;
-import org.eclipse.emf.edapt.internal.common.MetamodelFactory;
-import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 import org.jooq.SQLDialect;
@@ -37,29 +28,30 @@ import at.fhv.tedapt.flyway.entity.Column;
 
 @SuppressWarnings("restriction")
 @EdaptOperation(identifier="createClassTedapt", label="Create Class Tedapt", description="A new class and the coresponding table are created.")
-public class CreateClass extends OperationImplementation {
+public class CreateClass extends org.eclipse.emf.edapt.declaration.creation.NewClass {
 
-	/** {@description} */
-	@EdaptParameter(main=true,description="The package to create the class within")
-	public EPackage ePackage;
-	
-	/** {@description} */
-	@EdaptParameter(description="The name of the new class")
-	public String name;
-	
-	/** {@description} */
-	@EdaptParameter(optional = true, description = "The super classes of the new class")
-	public List<EClass> superClasses = new ArrayList<EClass>();
-	
-	/** {@description} */
-	@EdaptParameter(description = "Whether the class is abstract or not")
-	public Boolean abstr = false;
+//	/** {@description} */
+//	@EdaptParameter(main=true,description="The package to create the class within")
+//	public EPackage ePackage;
+//	
+//	/** {@description} */
+//	@EdaptParameter(description="The name of the new class")
+//	public String name;
+//	
+//	/** {@description} */
+//	@EdaptParameter(optional = true, description = "The super classes of the new class")
+//	public List<EClass> superClasses = new ArrayList<EClass>();
+//	
+//	/** {@description} */
+//	@EdaptParameter(description = "Whether the class is abstract or not")
+//	public Boolean abstr = false;
 	
 	/** {@inheritDoc} */
 	@Override
-	protected void execute(Metamodel metamodel, Model model)
-			throws MigrationException {
-		MetamodelFactory.newEClass(ePackage, name, superClasses, abstr);
+	public void execute(Metamodel metamodel, Model model) {
+
+		//Metamodel adaption
+		super.execute(metamodel, model);
 		
 		//Only super class needs to be represented as table
 		if(superClasses.isEmpty()) {

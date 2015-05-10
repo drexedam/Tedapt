@@ -9,12 +9,8 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
-import org.eclipse.emf.edapt.declaration.EdaptParameter;
-import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.history.util.HistoryUtils;
-import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 import org.jooq.DSLContext;
@@ -32,24 +28,12 @@ import at.fhv.tedapt.helper.CommonTasks;
  */
 @SuppressWarnings("restriction")
 @EdaptOperation(identifier="deleteFeaterTedapt", label="Delete Feature Tedapt", description="Deletes a feature and its corresponding DB entries.")
-public class DeleteFeature extends OperationImplementation {
+public class DeleteFeature extends org.eclipse.emf.edapt.declaration.creation.DeleteFeature {
 
-	/** {@description} */
-	@EdaptParameter(main = true, description = "The feature to be deleted")
-	public EStructuralFeature feature;
-	
+
 	@Override
-	protected void execute(Metamodel metamodel, Model model)
-			throws MigrationException {
+	public void execute(Metamodel metamodel, Model model) {
 		
-		// metamodel adaptation
-		metamodel.delete(feature);
-		if (feature instanceof EReference) {
-			EReference reference = (EReference) feature;
-			if (reference.getEOpposite() != null) {
-				metamodel.delete(reference.getEOpposite());
-			}
-		}	
 		
 		Change change = null, change2 = null;
 		DSLContext context = DatabaseHandler.getContext();
@@ -95,7 +79,7 @@ public class DeleteFeature extends OperationImplementation {
 							metamodel.getEPackages().get(0).eResource()), "Delete Feature "+feature.getName());
 		}
 		
-		
+		super.execute(metamodel, model);
 		
 
 	}
