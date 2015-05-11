@@ -3,8 +3,12 @@ package at.fhv.tedapt.operation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edapt.declaration.EdaptOperation;
+import org.eclipse.emf.edapt.declaration.EdaptParameter;
+import org.eclipse.emf.edapt.declaration.OperationImplementation;
 import org.eclipse.emf.edapt.history.util.HistoryUtils;
+import org.eclipse.emf.edapt.migration.MigrationException;
 import org.eclipse.emf.edapt.spi.migration.Metamodel;
 import org.eclipse.emf.edapt.spi.migration.Model;
 
@@ -23,20 +27,49 @@ import at.fhv.tedapt.helper.CommonTasks;
  */
 @SuppressWarnings("restriction")
 @EdaptOperation(identifier = "copyFeatureTedapt", label = "Copy Feature Tedapt", description = "Copy a feature in the metamodel with a new name and copy values in databse.")
-public class CopyFeature extends org.eclipse.emf.edapt.declaration.creation.CopyFeature {
+public class CopyFeature extends OperationImplementation {
 
 	
+    /** {@description} */
+    @EdaptParameter(main = true, description = "The feature to be copied")
+    public EStructuralFeature feature;
+
+    /** {@description} */
+    @EdaptParameter(description = "The name of the copy")
+    public String name;
+	
 	@Override
-	public void execute(Metamodel metamodel, Model model) {
+	public void execute(Metamodel metamodel, Model model) throws MigrationException {
 		EClass contextClass = feature.getEContainingClass();
 		Change change = null;
-		
-		// metamodel adaptation
-		super.execute(metamodel, model);
+
 		
 		if(feature instanceof EReference) {
+			
+            CreateReference cf = new CreateReference();
+            cf.eClass = contextClass;
+            cf.lowerBound = feature.getLowerBound();
+            cf.upperBound = feature.getUpperBound();
+            cf.containment = ((EReference) feature).isContainment();
+            cf.name = name;
+            cf.type = ((EReference) feature).getEReferenceType();
+            cf.checkAndExecute(metamodel, model);
+            //createReference(contextClass, metamodel, model);
+
+			
 			change = copyReference(contextClass);
 		} else if(feature instanceof EAttribute) {
+			
+            CreateAttribute ca = new CreateAttribute();
+            ca.eClass = contextClass;
+            ca.lowerBound = feature.getLowerBound();
+            ca.upperBound = feature.getUpperBound();
+            ca.name = name;
+            ca.type = ((EAttribute) feature).getEAttributeType();
+            ca.defaultValue = feature.getDefaultValueLiteral();
+            ca.checkAndExecute(metamodel, model);
+
+			
 			change = copyAttribute(contextClass);
 		}
 		
