@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.emf.ecore.extension_parser">
+      <parser
+            class="org.eclipse.emf.teneo.hibernate.resource.HibernateResourceFactory"
+            type="library">
+      </parser>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated Library -->
+      <package
+            uri="http://www.fhv.at/library/V2"
+            class="libraryExample.LibraryPackage"
+            genModel="models/Library.genmodel"/>
+   </extension>
+   <extension
+         point="org.eclipse.emf.ecore.extension_parser">
+      <parser
+            class="libraryExample.util.LibraryResourceFactoryImpl"
+            type="library">
+      </parser>
+   </extension>
+
+</plugin>

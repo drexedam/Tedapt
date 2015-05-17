@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<history:History xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:history="http://www.eclipse.org/emf/edapt/history/0.3">
+  <releases date="2015-05-15T19:24:46.829+0200">
+    <changes xsi:type="history:CompositeChange">
+      <changes xsi:type="history:Create" element="Library.ecore#/">
+        <changes xsi:type="history:Set" element="Library.ecore#/" featureName="name"
+            dataValue="libraryExample"/>
+        <changes xsi:type="history:Set" element="Library.ecore#/" featureName="nsURI"
+            dataValue="http://www.fhv.at/library/V2"/>
+        <changes xsi:type="history:Set" element="Library.ecore#/" featureName="nsPrefix"
+            dataValue="libraryExample"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#/" referenceName="eClassifiers"
+          element="Library.ecore#//Library">
+        <changes xsi:type="history:Set" element="Library.ecore#//Library" featureName="name"
+            dataValue="Library"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//Library" referenceName="eStructuralFeatures"
+          element="Library.ecore#//Library/name">
+        <changes xsi:type="history:Set" element="Library.ecore#//Library/name" featureName="name"
+            dataValue="name"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Library/name" featureName="eType"
+            referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#/" referenceName="eClassifiers"
+          element="Library.ecore#//Book">
+        <changes xsi:type="history:Set" element="Library.ecore#//Book" featureName="name"
+            dataValue="Book"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//Library" referenceName="eStructuralFeatures"
+          element="Library.ecore#//Library/books">
+        <changes xsi:type="history:Set" element="Library.ecore#//Library/books" featureName="name"
+            dataValue="books"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Library/books" featureName="upperBound"
+            dataValue="-1" oldDataValue="1"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Library/books" featureName="containment"
+            dataValue="true" oldDataValue="false"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Library/books" featureName="eType"
+            referenceValue="Library.ecore#//Book"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//Book" referenceName="eStructuralFeatures"
+          element="Library.ecore#//Book/title">
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/title" featureName="name"
+            dataValue="title"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/title" featureName="eType"
+            referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//Book" referenceName="eStructuralFeatures"
+          element="Library.ecore#//Book/pages">
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/pages" featureName="name"
+            dataValue="pages"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/pages" featureName="defaultValueLiteral"
+            dataValue="100"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/pages" featureName="eType"
+            referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#/" referenceName="eClassifiers"
+          element="Library.ecore#//Writer">
+        <changes xsi:type="history:Set" element="Library.ecore#//Writer" featureName="name"
+            dataValue="Writer"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//Library" referenceName="eStructuralFeatures"
+          element="Library.ecore#//Library/writers">
+        <changes xsi:type="history:Set" element="Library.ecore#//Library/writers"
+            featureName="name" dataValue="writers"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Library/writers"
+            featureName="upperBound" dataValue="-1" oldDataValue="1"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Library/writers"
+            featureName="containment" dataValue="true" oldDataValue="false"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Library/writers"
+            featureName="eType" referenceValue="Library.ecore#//Writer"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//Writer" referenceName="eStructuralFeatures"
+          element="Library.ecore#//Writer/name">
+        <changes xsi:type="history:Set" element="Library.ecore#//Writer/name" featureName="name"
+            dataValue="name"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Writer/name" featureName="eType"
+            referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//Writer" referenceName="eStructuralFeatures"
+          element="Library.ecore#//Writer/books">
+        <changes xsi:type="history:Set" element="Library.ecore#//Writer/books" featureName="name"
+            dataValue="books"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Writer/books" featureName="upperBound"
+            dataValue="-1" oldDataValue="1"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Writer/books" featureName="eType"
+            referenceValue="Library.ecore#//Book"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//Book" referenceName="eStructuralFeatures"
+          element="Library.ecore#//Book/writer">
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/writer" featureName="name"
+            dataValue="writer"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/writer" featureName="lowerBound"
+            dataValue="1" oldDataValue="0"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/writer" featureName="eType"
+            referenceValue="Library.ecore#//Writer"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/writer" featureName="eOpposite"
+            referenceValue="Library.ecore#//Writer/books"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Writer/books" featureName="eOpposite"
+            referenceValue="Library.ecore#//Book/writer"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#/" referenceName="eClassifiers"
+          element="Library.ecore#//SchoolLibrary">
+        <changes xsi:type="history:Set" element="Library.ecore#//SchoolLibrary" featureName="name"
+            dataValue="SchoolLibrary"/>
+        <changes xsi:type="history:Add" element="Library.ecore#//SchoolLibrary" featureName="eSuperTypes"
+            referenceValue="Library.ecore#//Library"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//SchoolLibrary" referenceName="eStructuralFeatures"
+          element="Library.ecore#//SchoolLibrary/location">
+        <changes xsi:type="history:Set" element="Library.ecore#//SchoolLibrary/location"
+            featureName="name" dataValue="location"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//SchoolLibrary/location"
+            featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#/" referenceName="eClassifiers"
+          element="Library.ecore#//BookCategory">
+        <changes xsi:type="history:Set" element="Library.ecore#//BookCategory" featureName="name"
+            dataValue="BookCategory"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//Book" referenceName="eStructuralFeatures"
+          element="Library.ecore#//Book/category">
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/category" featureName="name"
+            dataValue="category"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/category" featureName="defaultValueLiteral"
+            dataValue="Mystery"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Book/category" featureName="eType"
+            referenceValue="Library.ecore#//BookCategory"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//BookCategory" referenceName="eLiterals"
+          element="Library.ecore#//BookCategory/Mystery">
+        <changes xsi:type="history:Set" element="Library.ecore#//BookCategory/Mystery"
+            featureName="name" dataValue="Mystery"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//BookCategory/Mystery"
+            featureName="literal" dataValue="Mystery"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//BookCategory" referenceName="eLiterals"
+          element="Library.ecore#//BookCategory/ScienceFiction">
+        <changes xsi:type="history:Set" element="Library.ecore#//BookCategory/ScienceFiction"
+            featureName="name" dataValue="ScienceFiction"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//BookCategory/ScienceFiction"
+            featureName="value" dataValue="1" oldDataValue="0"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//BookCategory/ScienceFiction"
+            featureName="literal" dataValue="ScienceFiction"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//BookCategory" referenceName="eLiterals"
+          element="Library.ecore#//BookCategory/Biography">
+        <changes xsi:type="history:Set" element="Library.ecore#//BookCategory/Biography"
+            featureName="name" dataValue="Biography"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//BookCategory/Biography"
+            featureName="value" dataValue="2" oldDataValue="0"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//BookCategory/Biography"
+            featureName="literal" dataValue="Biography"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#/" referenceName="eClassifiers"
+          element="Library.ecore#//Asset">
+        <changes xsi:type="history:Set" element="Library.ecore#//Asset" featureName="name"
+            dataValue="Asset"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#//Asset" referenceName="eStructuralFeatures"
+          element="Library.ecore#//Asset/value">
+        <changes xsi:type="history:Set" element="Library.ecore#//Asset/value" featureName="name"
+            dataValue="value"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Asset/value" featureName="defaultValueLiteral"
+            dataValue="0.0"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Asset/value" featureName="eType"
+            referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      </changes>
+      <changes xsi:type="history:Create" target="Library.ecore#/" referenceName="eClassifiers"
+          element="Library.ecore#//SchoolBook">
+        <changes xsi:type="history:Set" element="Library.ecore#//SchoolBook" featureName="name"
+            dataValue="SchoolBook"/>
+        <changes xsi:type="history:Add" element="Library.ecore#//SchoolBook" featureName="eSuperTypes"
+            referenceValue="Library.ecore#//Book"/>
+        <changes xsi:type="history:Add" element="Library.ecore#//SchoolBook" featureName="eSuperTypes"
+            referenceValue="Library.ecore#//Asset"/>
+      </changes>
+    </changes>
+  </releases>
+  <releases date="2015-05-15T22:54:58.552+0200">
+    <changes xsi:type="history:OperationChange">
+      <changes xsi:type="history:Create" target="Library.ecore#//Writer" referenceName="eStructuralFeatures"
+          element="Library.ecore#//Writer/lastname">
+        <changes xsi:type="history:Set" element="Library.ecore#//Writer/lastname"
+            featureName="name" dataValue="lastname"/>
+        <changes xsi:type="history:Set" element="Library.ecore#//Writer/lastname"
+            featureName="eType" referenceValue="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </changes>
+      <operation name="createAttributeTedapt">
+        <parameters name="eClass">
+          <referenceValue element="Library.ecore#//Writer"/>
+        </parameters>
+        <parameters name="name">
+          <dataValue>lastname</dataValue>
+        </parameters>
+        <parameters name="type">
+          <referenceValue element="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </parameters>
+        <parameters name="lowerBound">
+          <dataValue>0</dataValue>
+        </parameters>
+        <parameters name="upperBound">
+          <dataValue>1</dataValue>
+        </parameters>
+        <parameters name="defaultValue">
+          <dataValue xsi:nil="true"/>
+        </parameters>
+      </operation>
+    </changes>
+    <changes xsi:type="history:Set" element="Library.ecore#/" featureName="nsURI"
+        dataValue="http://www.fhv.at/library/V3" oldDataValue="http://www.fhv.at/library/V2"/>
+  </releases>
+  <releases>
+    <changes xsi:type="history:Set" element="Library.ecore#/" featureName="nsURI"
+        dataValue="http://www.fhv.at/library/V2" oldDataValue="http://www.fhv.at/library/V3"/>
+  </releases>
+</history:History>
