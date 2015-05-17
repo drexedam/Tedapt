@@ -6,10 +6,11 @@
 ## Structure ##
 
 ### at.fhv.tedapt ###
-Full Eclipse project containing developed operations.
+Full Eclipse project containing the developed plug-in
 
 ### at.fhv.tedapt.library.flyaway ###
-Flyaway core library as plugin to be used by at.fhv.tedapt
+Flyway core library as plugin to be used by at.fhv.tedapt
+**NOTE:** there is a typo in the project name!
 
 ### at.fhv.tedapt.library.jsonsimple ###
 JSON.simple library as plugin to be used by at.fhv.tedapt
@@ -20,8 +21,24 @@ jOOQ library as plugin to be used by at.fhv.tedapt
 ### at.fhv.tedapt.feature ###
 Eclipse feature
 
-### at,fhv.tedapt.releng.p2 ###
+### at.fhv.tedapt.releng.p2 ###
 Plugin update site
 
 ### at.fhv.tedapt.test ###
-JUnit Tests
+Project for testing
+
+### ExampleIntegration ###
+#### metamodel_and_editor ####
+*Library
+    *Contains the metamodel and its history plus the generated model code
+*Library.edit
+    *Generated edit code
+*Library.editor
+    *Generated and modified editor
+*Library.tests
+    *Generated test project
+####model/LibraryExample####
+Project containing a library model and therefore uses the modified editor
+
+### at.fhv.tedapt.customexample ###
+A project containing an Edapt and Flyway custom migration
