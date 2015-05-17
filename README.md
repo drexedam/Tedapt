@@ -29,14 +29,14 @@ Project for testing
 
 ### ExampleIntegration ###
 #### metamodel_and_editor ####
-*Library
-    *Contains the metamodel and its history plus the generated model code
-*Library.edit
-    *Generated edit code
-*Library.editor
-    *Generated and modified editor
-*Library.tests
-    *Generated test project
+* Library
+    * Contains the metamodel and its history plus the generated model code
+* Library.edit
+    * Generated edit code
+* Library.editor
+    * Generated and modified editor
+* Library.tests
+    * Generated test project
 ####model/LibraryExample####
 Project containing a library model and therefore uses the modified editor
 
