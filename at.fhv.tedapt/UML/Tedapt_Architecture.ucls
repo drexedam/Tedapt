@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.8" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
+  <class id="1" language="java" name="at.fhv.tedapt.operation.CreateAttribute" project="at.fhv.tedapt" 
+    file="/at.fhv.tedapt/src/at/fhv/tedapt/operation/CreateAttribute.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="926" y="351"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="at.fhv.tedapt.operation.DeleteFeature" project="at.fhv.tedapt" 
+    file="/at.fhv.tedapt/src/at/fhv/tedapt/operation/DeleteFeature.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="332" y="348"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="at.fhv.tedapt.operation.CreateReference" project="at.fhv.tedapt" 
+    file="/at.fhv.tedapt/src/at/fhv/tedapt/operation/CreateReference.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="756" y="411"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="at.fhv.tedapt.operation.CopyFeature" project="at.fhv.tedapt" 
+    file="/at.fhv.tedapt/src/at/fhv/tedapt/operation/CopyFeature.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="704" y="112"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="at.fhv.tedapt.operation.CreateClass" project="at.fhv.tedapt" 
+    file="/at.fhv.tedapt/src/at/fhv/tedapt/operation/CreateClass.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="98" y="364"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="org.eclipse.emf.edapt.declaration.creation.NewClass" project="at.fhv.tedapt" 
+    file="E:/eclipse/eclipse-rcp-luna-SR2-win32-x86_64/eclipse/plugins/org.eclipse.emf.edapt.declaration_1.1.0.201504011446.jar" 
+    binary="true" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="103" y="199"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="org.eclipse.emf.edapt.declaration.creation.DeleteFeature" project="at.fhv.tedapt" 
+    file="E:/eclipse/eclipse-rcp-luna-SR2-win32-x86_64/eclipse/plugins/org.eclipse.emf.edapt.declaration_1.1.0.201504011446.jar" 
+    binary="true" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="350" y="168"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="org.eclipse.emf.edapt.declaration.creation.NewAttribute" project="at.fhv.tedapt" 
+    file="E:/eclipse/eclipse-rcp-luna-SR2-win32-x86_64/eclipse/plugins/org.eclipse.emf.edapt.declaration_1.1.0.201504011446.jar" 
+    binary="true" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="927" y="137"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="org.eclipse.emf.edapt.declaration.creation.NewReference" project="at.fhv.tedapt" 
+    file="E:/eclipse/eclipse-rcp-luna-SR2-win32-x86_64/eclipse/plugins/org.eclipse.emf.edapt.declaration_1.1.0.201504011446.jar" 
+    binary="true" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="570" y="397"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="org.eclipse.emf.edapt.declaration.OperationImplementation" 
+    project="at.fhv.tedapt" 
+    file="E:/eclipse/eclipse-rcp-luna-SR2-win32-x86_64/eclipse/plugins/org.eclipse.emf.edapt.declaration_1.1.0.201504011446.jar" 
+    binary="true" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="351" y="34"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="false" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <generalization id="11">    
+    <bendpoint x="846" y="135"/>    
+    <bendpoint x="808" y="136"/>    
+    <bendpoint x="810" y="15"/>    
+    <bendpoint x="477" y="12"/>    
+    <bendpoint x="475" y="94"/>    
+    <bendpoint x="350" y="92"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="12">    
+    <bendpoint x="567" y="96"/>    
+    <bendpoint x="350" y="92"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="13">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <dependency id="14">    
+    <bendpoint x="806" y="346"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <generalization id="15">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <dependency id="16">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <generalization id="17">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <dependency id="18">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <generalization id="19">    
+    <bendpoint x="569" y="96"/>    
+    <bendpoint x="350" y="93"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <generalization id="20">    
+    <bendpoint x="108" y="90"/>    
+    <bendpoint x="352" y="90"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <generalization id="22">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <generalization id="23">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="false" private="true" static="true"/>    
+    <operations public="false" package="false" protected="false" private="false" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
